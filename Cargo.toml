@@ -1,0 +1,6 @@
+[package]
+name = "gentle-ap-physics-rs"
+version = "0.1.0"
+authors = ["Tanay Nathan <tnathan@berkeley.edu>"]
+
+[dependencies]

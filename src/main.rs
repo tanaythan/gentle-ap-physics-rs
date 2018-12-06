@@ -1,3 +1,8 @@
+mod entity;
+
 fn main() {
-    println!("Hello, world!");
+    let state = entity::EntityState::new(1.0, 2.0, 3.0);
+    let plane = entity::plane::Plane::new(state.clone(), 1.0, 2.0, 4.0);
+    println!("{:?}", state);
+    println!("{:?}", plane);
 }

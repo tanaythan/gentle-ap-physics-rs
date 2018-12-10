@@ -1,10 +1,13 @@
 pub mod plane;
+pub mod worldstate;
 
 pub trait BaseEntity {
     fn set_entity_state(&mut self, EntityState);
     fn get_entity_state(&self) -> &EntityState;
     fn get_mass(&self) -> f32;
-    fn get_next_state();
+    fn get_next_state(&self, f64) -> EntityState;
+    fn update_state(&self, f64, f64);
+    fn print(&self);
 }
 
 pub trait RoundedEntity {

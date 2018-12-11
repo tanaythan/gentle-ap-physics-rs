@@ -18,6 +18,16 @@ impl Plane {
     };
   }
 }
+impl Clone for Plane {
+  fn clone(&self) -> Plane {
+    Plane {
+      state: self.state.clone(),
+      mass: self.mass,
+      width: self.width,
+      length: self.length,
+    }
+  }
+}
 
 impl entity::BaseEntity for Plane {
   fn set_entity_state(&mut self, state: entity::EntityState) {
@@ -32,7 +42,18 @@ impl entity::BaseEntity for Plane {
     return self.mass;
   }
 
-  fn get_next_state() {}
+  fn get_next_state(&self, x: f64) -> entity::EntityState {
+    self.state
+  }
+
+  fn new_entity_with_state(&self, entity: entity::EntityState) -> Box<entity::BaseEntity> {
+    let plane = self.clone();
+    Box::new(plane)
+  }
+
+  fn update_state(&self, val: f64, val2: f64) {}
+
+  fn print(&self) {}
 }
 
 #[cfg(test)]

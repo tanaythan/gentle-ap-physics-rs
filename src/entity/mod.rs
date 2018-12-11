@@ -7,6 +7,7 @@ pub trait BaseEntity {
     fn get_mass(&self) -> f32;
     fn get_next_state(&self, f64) -> EntityState;
     fn update_state(&self, f64, f64);
+    fn new_entity_with_state(&self, EntityState) -> Box<BaseEntity>;
     fn print(&self);
 }
 

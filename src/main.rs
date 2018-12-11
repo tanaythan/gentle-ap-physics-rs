@@ -12,22 +12,23 @@ fn main() {
     //Initialize our planes and spheres
     let state = entity::EntityState::new(1.0, 2.0, 3.0);
     let plane = entity::plane::Plane::new(state.clone(), 1.0, 2.0, 4.0);
-    let all_entities = Vec::<entity::BaseEntity>::new();
-    all_entities.push(&plane);
+    let all_entities: Vec<Box<entity::BaseEntity>> = Vec::new();
+    all_entities.push(Box::new(plane));
 
     //Initialize world states
     let mut prev = entity::worldstate::WorldState::new(all_entities);
     let mut curr = entity::worldstate::WorldState::new(all_entities);
-    
+
     while true {
         let new_time = std::time::Instant::now();
-        let mut frame_time = new_time.from(current_time).as_nanos / 1000000000; // from ns to s
-        if frame_time > 0.25 { // where did this constant come from?
-            frame_time = 0.25;
+        let mut frame_time = duration_to_s(new_time.duration_since(current_time)); // from ns to s
+        if frame_time > 25 {
+            // where did this constant come from?
+            frame_time = 25;
         }
         current_time = new_time;
 
-        accumulator += frame_time;
+        accumulator += frame_time as f64;
 
         while accumulator >= dt {
             prev = curr;
@@ -42,4 +43,10 @@ fn main() {
         lerp_state.print_state();
         */
     }
+}
+
+fn duration_to_s(duration: std::time::Duration) -> u64 {
+    let nanos = duration.subsec_nanos() as u64;
+    let s = (1000 * 1000 * 1000 * duration.as_secs() + nanos) / (1000 * 1000 * 1000);
+    s
 }

@@ -1,16 +1,14 @@
 use entity;
-use std::ops::{Mul};
+use entity::BaseEntity;
+use std::ops::Mul;
 
-#[derive(Debug)]
 pub struct WorldState {
-    entities: Vec<&entity::BaseEntity>,
+    entities: Vec<Box<entity::BaseEntity>>,
 }
 
 impl WorldState {
-    pub fn new(entities: Vec<&entity::BaseEntity>) -> WorldState {
-        return WorldState {
-            entities: entities
-        };
+    pub fn new(entities: Vec<Box<entity::BaseEntity>>) -> WorldState {
+        return WorldState { entities: entities };
     }
 
     pub fn update_entities(&self, time: f64, dt: f64) {
@@ -30,10 +28,11 @@ impl Mul<f64> for WorldState {
     type Output = WorldState;
 
     fn mul(self, _rhs: f64) -> WorldState {
-        let mut lerp_ents = Vec::<&entity::BaseEntity>::new(); 
+        let mut lerp_ents = Vec::<Box<entity::BaseEntity>>::new();
         for ent in self.entities {
-            lerp_ents.push(ent.get_next_state(_rhs));
+            let new_ent = ent.new_entity_with_state(ent.get_next_state(_rhs));
+            lerp_ents.push(new_ent);
         }
-        lerp_ents
+        WorldState::new(lerp_ents)
     }
 }

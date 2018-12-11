@@ -23,9 +23,16 @@ impl WorldState {
     }
 }
 
-impl Copy for WorldState {
+impl Clone for WorldState {
     fn clone(&self) -> WorldState {
-        WorldState::new(&self.entities);
+        let mut new_entities: Vec<Box<entity::BaseEntity>> = Vec::new();
+        for entity in &self.entities {
+            let new_ent = (*entity).clone();
+            new_entities.push(new_ent);
+        }
+        WorldState {
+            entities: new_entities,
+        }
     }
 }
 

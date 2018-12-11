@@ -19,7 +19,7 @@ fn main() {
     let mut prev = entity::worldstate::WorldState::new(Vec::new());
     let mut curr = entity::worldstate::WorldState::new(all_entities);
 
-    while true {
+    loop {
         let new_time = std::time::Instant::now();
         let mut frame_time = duration_to_s(new_time.duration_since(current_time)); // from ns to s
         if frame_time > 25 {
@@ -31,7 +31,7 @@ fn main() {
         accumulator += frame_time as f64;
 
         while accumulator >= dt {
-            prev = curr;
+            prev = curr.clone();
             curr.update_entities(t, dt);
             accumulator -= dt;
             t += dt;

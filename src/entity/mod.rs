@@ -1,10 +1,33 @@
 pub mod plane;
+pub mod worldstate;
 
-pub trait BaseEntity {
+pub trait BaseEntity: BaseEntityClone {
     fn set_entity_state(&mut self, EntityState);
     fn get_entity_state(&self) -> &EntityState;
     fn get_mass(&self) -> f32;
-    fn get_next_state();
+    fn get_next_state(&self, f64) -> EntityState;
+    fn update_state(&self, f64, f64);
+    fn new_entity_with_state(&self, EntityState) -> Box<BaseEntity>;
+    fn print(&self);
+}
+
+trait BaseEntityClone {
+    fn clone_box(&self) -> Box<BaseEntity>;
+}
+
+impl<T> BaseEntityClone for T
+where
+    T: 'static + BaseEntity + Clone,
+{
+    fn clone_box(&self) -> Box<BaseEntity> {
+        Box::new(self.clone())
+    }
+}
+
+impl Clone for Box<BaseEntity> {
+    fn clone(&self) -> Box<BaseEntity> {
+        self.clone_box()
+    }
 }
 
 pub trait RoundedEntity {

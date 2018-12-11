@@ -43,7 +43,7 @@ impl entity::BaseEntity for Plane {
   }
 
   fn get_next_state(&self, x: f64) -> entity::EntityState {
-    self.state
+    self.state.clone()
   }
 
   fn new_entity_with_state(&self, entity: entity::EntityState) -> Box<entity::BaseEntity> {

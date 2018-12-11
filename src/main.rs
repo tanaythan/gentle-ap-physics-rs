@@ -12,11 +12,11 @@ fn main() {
     //Initialize our planes and spheres
     let state = entity::EntityState::new(1.0, 2.0, 3.0);
     let plane = entity::plane::Plane::new(state.clone(), 1.0, 2.0, 4.0);
-    let all_entities: Vec<Box<entity::BaseEntity>> = Vec::new();
+    let mut all_entities: Vec<Box<entity::BaseEntity>> = Vec::new();
     all_entities.push(Box::new(plane));
 
     //Initialize world states
-    let mut prev = entity::worldstate::WorldState::new(all_entities);
+    let mut prev = entity::worldstate::WorldState::new(Vec::new());
     let mut curr = entity::worldstate::WorldState::new(all_entities);
 
     while true {

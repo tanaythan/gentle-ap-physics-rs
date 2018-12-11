@@ -1,5 +1,4 @@
 use entity;
-use entity::BaseEntity;
 use std::ops::Mul;
 
 pub struct WorldState {
@@ -12,15 +11,21 @@ impl WorldState {
     }
 
     pub fn update_entities(&self, time: f64, dt: f64) {
-        for ent in self.entities {
+        for ent in &self.entities {
             ent.update_state(time, dt);
         }
     }
 
     pub fn print_state(&self) {
-        for ent in self.entities {
+        for ent in &self.entities {
             ent.print();
         }
+    }
+}
+
+impl Copy for WorldState {
+    fn clone(&self) -> WorldState {
+        WorldState::new(&self.entities);
     }
 }
 

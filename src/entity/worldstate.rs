@@ -10,7 +10,7 @@ impl WorldState {
         return WorldState { entities: entities };
     }
 
-    pub fn update_entities(&self, time: f64, dt: f64) {
+    pub fn update_entities(&self, time: f32, dt: f32) {
         for ent in &self.entities {
             ent.update_state(time, dt);
         }
@@ -36,13 +36,13 @@ impl Clone for WorldState {
     }
 }
 
-impl Mul<f64> for WorldState {
+impl Mul<f32> for WorldState {
     type Output = WorldState;
 
-    fn mul(self, _rhs: f64) -> WorldState {
+    fn mul(self, _rhs: f32) -> WorldState {
         let mut lerp_ents = Vec::<Box<entity::BaseEntity>>::new();
         for ent in self.entities {
-            let new_ent = ent.new_entity_with_state(ent.get_next_state(_rhs));
+            let new_ent = ent.new_entity_with_state(ent.get_next_position(_rhs));
             lerp_ents.push(new_ent);
         }
         WorldState::new(lerp_ents)

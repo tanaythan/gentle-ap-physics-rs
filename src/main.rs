@@ -1,8 +1,7 @@
 mod entity;
 /* We can define physics constants here */
-static GRAVITY: f32 = 9.8;
+const dt: f32 = 0.1;
 
-const dt: f64 = 0.0;
 
 fn main() {
     let mut t = 0.0;
@@ -10,7 +9,7 @@ fn main() {
     let mut accumulator = 0.0;
 
     //Initialize our planes and spheres
-    let state = entity::EntityState::new(1.0, 2.0, 3.0);
+    let state = entity::Vector3::new(1.0, 2.0, 3.0);
     let plane = entity::plane::Plane::new(state.clone(), 1.0, 2.0, 4.0);
     let mut all_entities: Vec<Box<entity::BaseEntity>> = Vec::new();
     all_entities.push(Box::new(plane));
@@ -28,7 +27,7 @@ fn main() {
         }
         current_time = new_time;
 
-        accumulator += frame_time as f64;
+        accumulator += frame_time as f32;
 
         while accumulator >= dt {
             prev = curr.clone();
@@ -37,8 +36,9 @@ fn main() {
             t += dt;
         }
 
+        /* Need to implement add overload for world state 
+
         let alpha = accumulator / dt;
-        /* If we want to do operator overloading:
         let lerp_state: WorldState = curr * alpha + prev * (1.0 - alpha);
         lerp_state.print_state();
         */

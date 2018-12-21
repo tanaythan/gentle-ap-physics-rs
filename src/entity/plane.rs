@@ -72,9 +72,9 @@ mod tests {
   fn it_creates_a_plane() {
     let position = entity::Vector3::new(3.0, 3.0, 4.0);
     let plane = Plane::new(position.clone(), 5.0, 1.0, 2.0);
-    let ent_state = plane.get_entity_state();
-    assert_eq!(ent_state.x, state.x);
-    assert_eq!(ent_state.y, state.y);
-    assert_eq!(ent_state.z, state.z);
+    let ent_state = plane.get_position();
+    assert_eq!(ent_state.x, position.x);
+    assert_eq!(ent_state.y, position.y);
+    assert_eq!(ent_state.z, position.z);
   }
 }

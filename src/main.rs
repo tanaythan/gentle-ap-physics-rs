@@ -1,4 +1,6 @@
 mod entity;
+mod util;
+
 /* We can define physics constants here */
 static GRAVITY: f32 = 9.8;
 

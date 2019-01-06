@@ -7,8 +7,8 @@ const ACC_GRAVITY: f32 = 9.8;
 pub struct Sphere {
     position: entity::Vector3,
     mass: f32,
-    radius: f32
-    velocity: entity:Vector3,
+    radius: f32,
+    velocity: entity::Vector3,
 }
 
 impl Sphere {
@@ -33,7 +33,7 @@ impl Clone for Sphere {
     }
 }
 
-impl entity:BaseEntity for Sphere {
+impl entity::BaseEntity for Sphere {
   fn set_position(&mut self, position: entity::Vector3) {
     self.position = position.clone();
   }
@@ -62,7 +62,7 @@ impl entity:BaseEntity for Sphere {
 
   fn print(&self) {}
 
-  fn get_net_acceleration(&self) -> Vector3{
+  fn get_net_acceleration(&self) -> entity::Vector3 {
     return entity::Vector3::new (0.0, self.mass * ACC_GRAVITY, 0.0);
   }
 

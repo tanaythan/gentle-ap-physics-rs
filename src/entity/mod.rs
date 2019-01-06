@@ -1,5 +1,6 @@
 pub mod plane;
 pub mod worldstate;
+pub mod sphere;
 use std::ops;
 
 pub trait BaseEntity: BaseEntityClone {
@@ -14,7 +15,7 @@ pub trait BaseEntity: BaseEntityClone {
     fn get_next_velocity(&self, dt: f32) -> Vector3;
 }
 
-trait BaseEntityClone {
+pub trait BaseEntityClone {
     fn clone_box(&self) -> Box<BaseEntity>;
 }
 

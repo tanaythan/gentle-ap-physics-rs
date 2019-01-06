@@ -1,5 +1,3 @@
-use util;
-
 const COEFFICIENT_OF_FRICTION: f64 = 0.05;
 const ACC_GRAVITY: f64 = 9.8;
 

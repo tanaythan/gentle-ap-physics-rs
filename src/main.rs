@@ -1,4 +1,5 @@
 mod entity;
+
 /* We can define physics constants here */
 const dt: f32 = 0.1;
 

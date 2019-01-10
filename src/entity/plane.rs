@@ -51,7 +51,7 @@ impl entity::BaseEntity for Plane {
     Box::new(plane)
   }
 
-  fn update_state(&self, t: f32, dt: f32) {}
+  fn update_state(&mut self, t: f32, dt: f32) {}
 
   fn print(&self) {}
 

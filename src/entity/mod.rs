@@ -1,5 +1,7 @@
 pub mod plane;
 pub mod worldstate;
+pub mod sphere;
+
 use std::ops;
 
 pub trait BaseEntity: BaseEntityClone {
@@ -7,7 +9,7 @@ pub trait BaseEntity: BaseEntityClone {
     fn get_position(&self) -> &Vector3;
     fn get_mass(&self) -> f32;
     fn get_next_position(&self, f32) -> Vector3;
-    fn update_state(&self, f32, f32);
+    fn update_state(&mut self, f32, f32);
     fn new_entity_with_state(&self, Vector3) -> Box<BaseEntity>;
     fn print(&self);
     fn get_net_acceleration(&self) -> Vector3;
@@ -37,7 +39,7 @@ pub trait RoundedEntity {
     fn get_moment_inertia() -> f64;
 }
 
-#[derive(Debug)]
+#[derive(Debug, Copy)]
 pub struct Vector3 {
     pub x: f32,
     pub y: f32,

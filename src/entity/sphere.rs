@@ -7,8 +7,8 @@ const ACC_GRAVITY: f32 = 9.8;
 pub struct Sphere {
     position: entity::Vector3,
     mass: f32,
-    radius: f32
-    velocity: entity:Vector3,
+    radius: f32,
+    velocity: entity::Vector3,
 }
 
 impl Sphere {
@@ -33,7 +33,7 @@ impl Clone for Sphere {
     }
 }
 
-impl entity:BaseEntity for Sphere {
+impl entity::BaseEntity for Sphere {
   fn set_position(&mut self, position: entity::Vector3) {
     self.position = position.clone();
   }
@@ -47,7 +47,7 @@ impl entity:BaseEntity for Sphere {
   }
 
   fn get_next_position(&self, dt: f32) -> entity::Vector3 {
-    return self.position + self.get_next_velocity * dt;
+    return self.position + self.get_next_velocity(dt) * dt;
   }
 
   fn new_entity_with_state(&self, entity: entity::Vector3) -> Box<entity::BaseEntity> {
@@ -55,14 +55,14 @@ impl entity:BaseEntity for Sphere {
     Box::new(sphere)
   }
 
-  fn update_state(&self, t: f32, dt: f32) {
-    self.velocity = self.get_next_velocity;
-    self.position = self.get_next_position;
+  fn update_state(&mut self, t: f32, dt: f32) {
+    self.velocity = self.get_next_velocity(dt);
+    self.position = self.get_next_position(dt);
   }
 
   fn print(&self) {}
 
-  fn get_net_acceleration(&self) -> Vector3{
+  fn get_net_acceleration(&self) -> entity::Vector3 {
     return entity::Vector3::new (0.0, self.mass * ACC_GRAVITY, 0.0);
   }
 

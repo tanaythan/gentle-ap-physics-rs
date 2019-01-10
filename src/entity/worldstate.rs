@@ -12,7 +12,7 @@ impl WorldState {
 
     pub fn update_entities(&self, time: f32, dt: f32) {
         for ent in &self.entities {
-            ent.update_state(time, dt);
+            //ent.update_state(time, dt);
         }
     }
 

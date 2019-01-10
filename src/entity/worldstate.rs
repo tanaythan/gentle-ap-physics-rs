@@ -59,7 +59,6 @@ impl Add for WorldState {
 
     fn add(self, other: WorldState) -> WorldState {
         let mut lerp_ents = Vec::<Box<entity::BaseEntity>>::new();
-        for ent in self.entities {}
-        WorldState::new(lerp_ents)
+        WorldState::new(self.entities.clone())
     }
 }

@@ -1,4 +1,5 @@
 use entity;
+use std::ops::Add;
 use std::ops::Mul;
 
 pub struct WorldState {
@@ -10,10 +11,14 @@ impl WorldState {
         return WorldState { entities: entities };
     }
 
-    pub fn update_entities(&self, time: f32, dt: f32) {
+    pub fn update_entities(&self, time: f32, dt: f32) -> WorldState {
+        let mut new_entities: Vec<Box<entity::BaseEntity>> = Vec::new();
         for ent in &self.entities {
-            //ent.update_state(time, dt);
+            new_entities.push((*ent).update_state(time, dt));
         }
+        let mut new_state = self.clone();
+        new_state.entities = new_entities;
+        new_state
     }
 
     pub fn print_state(&self) {
@@ -45,6 +50,16 @@ impl Mul<f32> for WorldState {
             let new_ent = ent.new_entity_with_state(ent.get_next_position(_rhs));
             lerp_ents.push(new_ent);
         }
+        WorldState::new(lerp_ents)
+    }
+}
+
+impl Add for WorldState {
+    type Output = WorldState;
+
+    fn add(self, other: WorldState) -> WorldState {
+        let mut lerp_ents = Vec::<Box<entity::BaseEntity>>::new();
+        for ent in self.entities {}
         WorldState::new(lerp_ents)
     }
 }

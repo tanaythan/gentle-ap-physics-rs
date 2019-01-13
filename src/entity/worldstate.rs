@@ -4,21 +4,23 @@ use std::ops::Add;
 use std::ops::Mul;
 
 pub struct WorldState {
+    time: f32,
     entities: HashMap<String, Box<entity::BaseEntity>>,
 }
 
 impl WorldState {
     pub fn new(entities: HashMap<String, Box<entity::BaseEntity>>) -> WorldState {
-        return WorldState { entities: entities };
+        return WorldState { entities: entities, time: 0.0 };
     }
 
-    pub fn update_entities(&self, time: f32, dt: f32) -> WorldState {
+    pub fn update_entities(&mut self, dt: f32) -> WorldState {
         let mut new_entities: HashMap<String, Box<entity::BaseEntity>> = HashMap::new();
         for (key, ent) in &self.entities {
-            new_entities.insert(key.clone(), (*ent).update_state(time, dt));
+            new_entities.insert(key.clone(), (*ent).update_state(self.time, dt));
         }
         let mut new_state = self.clone();
         new_state.entities = new_entities;
+        self.time += dt;
         new_state
     }
 
@@ -37,6 +39,7 @@ impl Clone for WorldState {
             new_entities.insert(key.clone(), new_ent);
         }
         WorldState {
+            time: self.time,
             entities: new_entities,
         }
     }

@@ -1,7 +1,7 @@
 pub mod plane;
 pub mod sphere;
 pub mod worldstate;
-use std::ops;
+use util::vector3::Vector3;
 
 pub trait BaseEntity: BaseEntityClone {
     fn set_position(&mut self, Vector3);
@@ -36,45 +36,6 @@ impl Clone for Box<BaseEntity> {
 
 pub trait RoundedEntity {
     fn get_moment_inertia() -> f64;
-}
-
-#[derive(Debug, Copy)]
-pub struct Vector3 {
-    pub x: f32,
-    pub y: f32,
-    pub z: f32,
-}
-
-impl Vector3 {
-    pub fn new(x: f32, y: f32, z: f32) -> Vector3 {
-        return Vector3 { x: x, y: y, z: z };
-    }
-}
-
-impl Clone for Vector3 {
-    fn clone(&self) -> Vector3 {
-        Vector3 {
-            x: self.x,
-            y: self.y,
-            z: self.z,
-        }
-    }
-}
-
-impl ops::Add<Vector3> for Vector3 {
-    type Output = Vector3;
-
-    fn add(self, _rhs: Vector3) -> Vector3 {
-        return Vector3::new(self.x + _rhs.x, self.y + _rhs.y, self.z + _rhs.z);
-    }
-}
-
-impl ops::Mul<f32> for Vector3 {
-    type Output = Vector3;
-
-    fn mul(self, _rhs: f32) -> Vector3 {
-        return Vector3::new(self.x * _rhs, self.y * _rhs, self.z * _rhs);
-    }
 }
 
 #[cfg(test)]

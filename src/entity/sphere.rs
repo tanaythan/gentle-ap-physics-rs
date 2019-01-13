@@ -1,21 +1,22 @@
 use entity;
-
-const ACC_GRAVITY: f32 = 9.8;
+use util::math;
+use util::vector3::Vector3;
 
 #[derive(Debug)]
+#[derive(Copy)]
 pub struct Sphere {
-    position: entity::Vector3,
+    position: Vector3,
     mass: f32,
     radius: f32,
-    velocity: entity::Vector3,
+    velocity: Vector3,
 }
 
 impl Sphere {
     pub fn new(
-        position: entity::Vector3,
+        position: Vector3,
         mass: f32,
         radius: f32,
-        velocity: entity::Vector3,
+        velocity: Vector3,
     ) -> Sphere {
         return Sphere {
             position: position,
@@ -38,15 +39,11 @@ impl Clone for Sphere {
 }
 
 impl entity::BaseEntity for Sphere {
-    fn set_position(&mut self, position: entity::Vector3) {
+    fn set_position(&mut self, position: Vector3) {
         self.position = position.clone();
     }
 
-    fn get_position(&self) -> &entity::Vector3 {
-        &self.position
-    }
-
-    fn get_position(&self) -> &entity::Vector3 {
+    fn get_position(&self) -> &Vector3 {
         &self.position
     }
 
@@ -54,11 +51,11 @@ impl entity::BaseEntity for Sphere {
         return self.mass;
     }
 
-    fn get_next_position(&self, dt: f32) -> entity::Vector3 {
-        return self.position + self.get_next_velocity(dt) * dt;
+    fn get_next_position(&self, dt: f32) -> Vector3 {
+        return math::new_pos(self.position, self.get_next_velocity(dt), dt)
     }
 
-    fn new_entity_with_state(&self, entity: entity::Vector3) -> Box<entity::BaseEntity> {
+    fn new_entity_with_state(&self, entity: Vector3) -> Box<entity::BaseEntity> {
         let sphere = self.clone();
         Box::new(sphere)
     }
@@ -70,14 +67,36 @@ impl entity::BaseEntity for Sphere {
         Box::new(self.clone())
     }
 
-    fn print(&self) {}
-
-    fn get_net_acceleration(&self) -> entity::Vector3 {
-        return entity::Vector3::new(0.0, self.mass * ACC_GRAVITY, 0.0);
+    fn print(&self) {
+        println!("{:?}", self);
     }
 
-    fn get_next_velocity(&self, dt: f32) -> entity::Vector3 {
+    fn get_net_acceleration(&self) -> Vector3 {
+        return Vector3::new(0.0, math::gravity(self.mass), 0.0);
+    }
+
+    fn get_next_velocity(&self, dt: f32) -> Vector3 {
         let net_accel = self.get_net_acceleration();
-        return self.velocity + net_accel * dt;
+        return math::velocity_from_acc(self.velocity, net_accel, dt);
+    }
+}
+
+impl Sphere {
+    pub fn is_collided(&self, other: Sphere) -> bool {
+        return math::detect_collide_sphere_to_sphere(self.position, other.position, self.radius, other.radius);
+    }
+}
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use entity::sphere::Sphere;
+    #[test]
+    fn it_is_collided() {
+        let vec = Vector3::new(1.0, 1.0, 1.0);
+        let sphere1 = Sphere::new(vec, 1.0, 1.0, vec);
+        let sphere2 = Sphere::new(vec, 1.0, 1.0, vec);
+        assert_eq!(true, sphere1.is_collided(sphere2));
     }
 }

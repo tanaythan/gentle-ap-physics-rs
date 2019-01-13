@@ -1,33 +1,39 @@
-const COEFFICIENT_OF_FRICTION: f64 = 0.05;
-const ACC_GRAVITY: f64 = 9.8;
+use super::vector3::Vector3;
 
-pub fn friction(f: f64) -> f64 {
+const COEFFICIENT_OF_FRICTION: f32 = 0.05;
+const ACC_GRAVITY: f32 = 9.8;
+
+pub fn friction(f: f32) -> f32 {
     COEFFICIENT_OF_FRICTION * f
 }
 
-pub fn gravity(m: f64) -> f64 {
+pub fn gravity(m: f32) -> f32 {
     m * ACC_GRAVITY
 }
 
-pub fn velocity(src_pos: f64, dst_pos: f64, t: f64) -> f64 {
+pub fn velocity(src_pos: Vector3, dst_pos: Vector3, t: f32) -> Vector3 {
     (dst_pos - src_pos) / t
 }
 
-pub fn new_pos(src_pos: f64, v: f64, t: f64) -> f64 {
+pub fn velocity_from_acc(v: Vector3, a: Vector3, t: f32) -> Vector3 {
+    v + a * t
+}
+
+pub fn new_pos(src_pos: Vector3, v: Vector3, t: f32) -> Vector3 {
     v * t + src_pos
 }
 
-fn sqr(x: f64) -> f64 {
+fn sqr(x: f32) -> f32 {
     x * x
 }
 
-pub fn detect_collide_sphere_to_sphere(x1: f64, y1: f64, x2: f64, y2: f64, 
-                                       r1: f64, r2: f64) -> bool {
-    sqr(x1 - x2) + sqr(y1 - y2) <= sqr(r1 + r2)
+pub fn detect_collide_sphere_to_sphere(src_pos: Vector3, compare_pos: Vector3, 
+                                       r1: f32, r2: f32) -> bool {
+    sqr(src_pos.x - compare_pos.x) + sqr(src_pos.y - compare_pos.y) + sqr(src_pos.z - compare_pos.z) <= sqr(r1 + r2)
 }
 
-pub fn detect_collide_sphere_to_plane(center: f64, plane: f64, 
-                                      normal: f64) -> bool {
+pub fn detect_collide_sphere_to_plane(center: f32, plane: f32, 
+                                      normal: f32) -> bool {
     (center - plane) * normal <= 0.0
 }
 
@@ -47,18 +53,26 @@ mod tests {
 
   #[test]
   fn it_calc_velocity() {
-    assert_eq!(1.0, velocity(1.0, 2.0, 1.0));
+    let src = Vector3::new(1.0, 1.0, 1.0);
+    let dst = Vector3::new(2.0, 2.0, 2.0);
+    let expected = Vector3::new(1.0, 1.0, 1.0);
+    assert_eq!(expected, velocity(src, dst, 1.0));
   }
 
   #[test]
   fn it_calc_new_pos() {
-    assert_eq!(3.0, new_pos(1.0, 2.0, 1.0));
+    let pos = Vector3::new(1.0, 1.0, 1.0);
+    let v = Vector3::new(2.0, 2.0, 2.0);
+    let expected = Vector3::new(3.0, 3.0, 3.0);
+    assert_eq!(expected, new_pos(pos, v, 1.0));
   }
 
   #[test]
   fn it_calc_detect_collide_sphere_to_sphere() {
-    assert_eq!(true, detect_collide_sphere_to_sphere(1.0, 1.0, 1.0, 1.0, 1.0, 1.0));
-    assert_eq!(false, detect_collide_sphere_to_sphere(2.0, 2.0, 1.0, 1.0, 0.0, 0.0));
+    let src = Vector3::new(1.0, 1.0, 1.0);
+    let dst = Vector3::new(2.0, 2.0, 2.0);
+    assert_eq!(true, detect_collide_sphere_to_sphere(src, dst, 1.0, 1.0));
+    assert_eq!(false, detect_collide_sphere_to_sphere(src, dst, 0.0, 0.0));
   }
 
   #[test]

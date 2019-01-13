@@ -2,17 +2,17 @@ mod entity;
 mod util;
 
 use std::collections::HashMap;
+use util::vector3::Vector3;
 
 /* We can define physics constants here */
 const dt: f32 = 0.1;
 
 fn main() {
-    let mut t = 0.0;
     let mut current_time = std::time::Instant::now();
     let mut accumulator = 0.0;
 
     //Initialize our planes and spheres
-    let state = entity::Vector3::new(1.0, 2.0, 3.0);
+    let state = Vector3::new(1.0, 2.0, 3.0);
     let plane = entity::plane::Plane::new(state.clone(), 1.0, 2.0, 4.0);
     let mut all_entities: HashMap<String, Box<entity::BaseEntity>> = HashMap::new();
     println!("{:?}", plane);
@@ -35,9 +35,8 @@ fn main() {
 
         while accumulator >= dt {
             prev = curr.clone();
-            curr = curr.update_entities(t, dt);
+            curr = curr.update_entities(dt);
             accumulator -= dt;
-            t += dt;
         }
 
         // Need to implement add overload for world state

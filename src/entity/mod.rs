@@ -2,6 +2,7 @@ pub mod plane;
 pub mod sphere;
 pub mod worldstate;
 use util::vector3::Vector3;
+use std::any::Any;
 
 pub trait BaseEntity: BaseEntityClone {
     fn set_position(&mut self, Vector3);
@@ -17,6 +18,7 @@ pub trait BaseEntity: BaseEntityClone {
 
 pub trait BaseEntityClone {
     fn clone_box(&self) -> Box<BaseEntity>;
+    fn as_any(&self) -> &dyn Any;
 }
 
 impl<T> BaseEntityClone for T
@@ -25,6 +27,10 @@ where
 {
     fn clone_box(&self) -> Box<BaseEntity> {
         Box::new(self.clone())
+    }
+
+    fn as_any(&self) -> &dyn Any {
+        self
     }
 }
 

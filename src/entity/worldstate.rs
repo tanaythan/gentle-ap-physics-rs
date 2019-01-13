@@ -29,6 +29,10 @@ impl WorldState {
             ent.print();
         }
     }
+
+    pub fn get(&self, key: &String) -> Box<entity::BaseEntity> {
+        self.entities.get(key).unwrap()
+    }
 }
 
 impl Clone for WorldState {

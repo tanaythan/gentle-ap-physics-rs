@@ -3,7 +3,6 @@ use util::math;
 use util::vector3::Vector3;
 
 #[derive(Debug)]
-#[derive(Copy)]
 pub struct Sphere {
     position: Vector3,
     mass: f32,

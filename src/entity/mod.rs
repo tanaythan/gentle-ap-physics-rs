@@ -1,6 +1,6 @@
 pub mod plane;
-pub mod worldstate;
 pub mod sphere;
+pub mod worldstate;
 use std::ops;
 
 pub trait BaseEntity: BaseEntityClone {
@@ -8,7 +8,7 @@ pub trait BaseEntity: BaseEntityClone {
     fn get_position(&self) -> &Vector3;
     fn get_mass(&self) -> f32;
     fn get_next_position(&self, f32) -> Vector3;
-    fn update_state(&self, f32, f32);
+    fn update_state(&self, f32, f32) -> Box<BaseEntity>;
     fn new_entity_with_state(&self, Vector3) -> Box<BaseEntity>;
     fn print(&self);
     fn get_net_acceleration(&self) -> Vector3;
@@ -38,7 +38,7 @@ pub trait RoundedEntity {
     fn get_moment_inertia() -> f64;
 }
 
-#[derive(Debug)]
+#[derive(Debug, Copy)]
 pub struct Vector3 {
     pub x: f32,
     pub y: f32,
@@ -65,7 +65,7 @@ impl ops::Add<Vector3> for Vector3 {
     type Output = Vector3;
 
     fn add(self, _rhs: Vector3) -> Vector3 {
-        return Vector3::new(self.x + _rhs.x, self.y + _rhs.y, self.z + _rhs.z)
+        return Vector3::new(self.x + _rhs.x, self.y + _rhs.y, self.z + _rhs.z);
     }
 }
 
@@ -73,7 +73,7 @@ impl ops::Mul<f32> for Vector3 {
     type Output = Vector3;
 
     fn mul(self, _rhs: f32) -> Vector3 {
-        return Vector3::new(self.x * _rhs, self.y * _rhs, self.z * _rhs)
+        return Vector3::new(self.x * _rhs, self.y * _rhs, self.z * _rhs);
     }
 }
 

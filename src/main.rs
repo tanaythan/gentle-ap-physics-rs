@@ -1,9 +1,10 @@
 mod entity;
 mod util;
 
+use std::collections::HashMap;
+
 /* We can define physics constants here */
 const dt: f32 = 0.1;
-
 
 fn main() {
     let mut t = 0.0;
@@ -13,11 +14,12 @@ fn main() {
     //Initialize our planes and spheres
     let state = entity::Vector3::new(1.0, 2.0, 3.0);
     let plane = entity::plane::Plane::new(state.clone(), 1.0, 2.0, 4.0);
-    let mut all_entities: Vec<Box<entity::BaseEntity>> = Vec::new();
-    all_entities.push(Box::new(plane));
+    let mut all_entities: HashMap<String, Box<entity::BaseEntity>> = HashMap::new();
+    println!("{:?}", plane);
+    all_entities.insert(String::from("Plane1"), Box::new(plane));
 
     //Initialize world states
-    let mut prev = entity::worldstate::WorldState::new(Vec::new());
+    let mut prev = entity::worldstate::WorldState::new(all_entities.clone());
     let mut curr = entity::worldstate::WorldState::new(all_entities);
 
     loop {
@@ -33,17 +35,17 @@ fn main() {
 
         while accumulator >= dt {
             prev = curr.clone();
-            curr.update_entities(t, dt);
+            curr = curr.update_entities(t, dt);
             accumulator -= dt;
             t += dt;
         }
 
-        /* Need to implement add overload for world state 
+        // Need to implement add overload for world state
 
         let alpha = accumulator / dt;
-        let lerp_state: WorldState = curr * alpha + prev * (1.0 - alpha);
+        let lerp_state: entity::worldstate::WorldState =
+            curr.clone() * alpha + prev.clone() * (1.0 - alpha);
         lerp_state.print_state();
-        */
     }
 }
 

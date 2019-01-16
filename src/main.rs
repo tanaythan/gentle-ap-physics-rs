@@ -15,12 +15,11 @@ fn main() {
     let state = Vector3::new(1.0, 2.0, 3.0);
     let plane = entity::plane::Plane::new(state.clone(), 1.0, 2.0, 4.0);
     let mut all_entities: HashMap<String, Box<entity::BaseEntity>> = HashMap::new();
-    println!("{:?}", plane);
     all_entities.insert(String::from("Plane1"), Box::new(plane));
 
     //Initialize world states
-    let mut prev = entity::worldstate::WorldState::new(all_entities.clone());
-    let mut curr = entity::worldstate::WorldState::new(all_entities);
+    let mut prev = entity::worldstate::WorldState::new_with_map(all_entities.clone());
+    let mut curr = entity::worldstate::WorldState::new_with_map(all_entities);
 
     loop {
         let new_time = std::time::Instant::now();

@@ -9,8 +9,21 @@ pub struct WorldState {
 }
 
 impl WorldState {
-    pub fn new(entities: HashMap<String, Box<entity::BaseEntity>>) -> WorldState {
-        return WorldState { entities: entities, time: 0.0 };
+    pub fn new() -> WorldState {
+        WorldState {
+            entities: HashMap::new(),
+            time: 0.0,
+        }
+    }
+
+    pub fn new_with_map(entities: HashMap<String, Box<entity::BaseEntity>>) -> WorldState {
+        WorldState {
+            entities: entities,
+            time: 0.0,
+        }
+    }
+    pub fn add(&mut self, key: &str, ent: Box<entity::BaseEntity>) {
+        self.entities.insert(String::from(key), ent);
     }
 
     pub fn update_entities(&mut self, dt: f32) -> WorldState {
@@ -30,8 +43,8 @@ impl WorldState {
         }
     }
 
-    pub fn get(&self, key: &String) -> Box<entity::BaseEntity> {
-        self.entities.get(key).unwrap()
+    pub fn get(&self, key: String) -> Box<entity::BaseEntity> {
+        self.entities.get(&key).unwrap().clone()
     }
 }
 
@@ -58,7 +71,7 @@ impl Mul<f32> for WorldState {
             let new_ent = ent.new_entity_with_state(ent.get_next_position(_rhs));
             lerp_ents.insert(key, new_ent);
         }
-        WorldState::new(lerp_ents)
+        WorldState::new_with_map(lerp_ents)
     }
 }
 
@@ -78,6 +91,6 @@ impl Add for WorldState {
                 lerp_ents.insert(key, new_ent);
             }
         }
-        WorldState::new(lerp_ents)
+        WorldState::new_with_map(lerp_ents)
     }
 }

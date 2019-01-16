@@ -11,12 +11,7 @@ pub struct Sphere {
 }
 
 impl Sphere {
-    pub fn new(
-        position: Vector3,
-        mass: f32,
-        radius: f32,
-        velocity: Vector3,
-    ) -> Sphere {
+    pub fn new(position: Vector3, mass: f32, radius: f32, velocity: Vector3) -> Sphere {
         return Sphere {
             position: position,
             mass: mass,
@@ -29,17 +24,17 @@ impl Sphere {
 impl Clone for Sphere {
     fn clone(&self) -> Sphere {
         Sphere {
-            position: self.position.clone(),
+            position: self.position,
             mass: self.mass,
             radius: self.radius,
-            velocity: self.velocity.clone(),
+            velocity: self.velocity,
         }
     }
 }
 
 impl entity::BaseEntity for Sphere {
     fn set_position(&mut self, position: Vector3) {
-        self.position = position.clone();
+        self.position = position;
     }
 
     fn get_position(&self) -> &Vector3 {
@@ -51,7 +46,7 @@ impl entity::BaseEntity for Sphere {
     }
 
     fn get_next_position(&self, dt: f32) -> Vector3 {
-        return math::new_pos(self.position, self.get_next_velocity(dt), dt)
+        return math::new_pos(self.position, self.get_next_velocity(dt), dt);
     }
 
     fn new_entity_with_state(&self, entity: Vector3) -> Box<entity::BaseEntity> {
@@ -63,7 +58,7 @@ impl entity::BaseEntity for Sphere {
         let mut sphere = self.clone();
         sphere.velocity = sphere.get_next_velocity(dt);
         sphere.position = sphere.get_next_position(dt);
-        Box::new(self.clone())
+        Box::new(sphere)
     }
 
     fn print(&self) {
@@ -82,10 +77,14 @@ impl entity::BaseEntity for Sphere {
 
 impl Sphere {
     pub fn is_collided(&self, other: Sphere) -> bool {
-        return math::detect_collide_sphere_to_sphere(self.position, other.position, self.radius, other.radius);
+        return math::detect_collide_sphere_to_sphere(
+            self.position,
+            other.position,
+            self.radius,
+            other.radius,
+        );
     }
 }
-
 
 #[cfg(test)]
 mod tests {

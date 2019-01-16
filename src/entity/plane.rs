@@ -44,7 +44,7 @@ impl entity::BaseEntity for Plane {
     }
 
     fn get_next_position(&self, dt: f32) -> Vector3 {
-        self.position.clone()
+        self.position
     }
 
     fn new_entity_with_state(&self, entity: Vector3) -> Box<entity::BaseEntity> {
@@ -76,7 +76,7 @@ mod tests {
     #[test]
     fn it_creates_a_plane() {
         let position = Vector3::new(3.0, 3.0, 4.0);
-        let plane = Plane::new(position.clone(), 5.0, 1.0, 2.0);
+        let plane = Plane::new(position, 5.0, 1.0, 2.0);
         let ent_state = plane.get_position();
         assert_eq!(ent_state.x, position.x);
         assert_eq!(ent_state.y, position.y);

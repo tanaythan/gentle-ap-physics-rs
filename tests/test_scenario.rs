@@ -1,9 +1,9 @@
 extern crate gentle_ap_physics_rs;
 
-use gentle_ap_physics_rs::entity::BaseEntity;
-use gentle_ap_physics_rs::entity::worldstate::WorldState;
-use gentle_ap_physics_rs::entity::sphere::Sphere;
 use gentle_ap_physics_rs::entity::plane::Plane;
+use gentle_ap_physics_rs::entity::sphere::Sphere;
+use gentle_ap_physics_rs::entity::worldstate::WorldState;
+use gentle_ap_physics_rs::entity::BaseEntity;
 use gentle_ap_physics_rs::util::vector3::Vector3;
 use std::collections::HashMap;
 
@@ -26,18 +26,18 @@ fn test_scenario_collision() {
     all_entities.insert(plane1_key, Box::new(plane));
     all_entities.insert(sphere1_key, Box::new(sphere1));
     all_entities.insert(sphere2_key, Box::new(sphere2));
-    let mut state = WorldState::new(all_entities);
+    let mut state = WorldState::new_with_map(all_entities);
     let dt = 1.0;
-    
+
     // Should not collide before starting updates
-    let mut sphere1Box = state.get(&sphere1_key);
+    let mut sphere1Box = state.get(String::from("Sphere1"));
     let mut sphere1Entity: &Sphere = match sphere1Box.as_any().downcast_ref::<Sphere>() {
         Some(b) => b,
-        None => panic!("asdasd")
+        None => panic!("asdasd"),
     };
-    
+
     // assert_eq!(false, sphere1.is_collided(sphere2));
-    
+
     // After updates should collide
     // state.update_entities(dt);
     // state.update_entities(dt);

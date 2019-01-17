@@ -4,21 +4,36 @@ use std::ops::Add;
 use std::ops::Mul;
 
 pub struct WorldState {
+    time: f32,
     entities: HashMap<String, Box<entity::BaseEntity>>,
 }
 
 impl WorldState {
-    pub fn new(entities: HashMap<String, Box<entity::BaseEntity>>) -> WorldState {
-        return WorldState { entities: entities };
+    pub fn new() -> WorldState {
+        WorldState {
+            entities: HashMap::new(),
+            time: 0.0,
+        }
     }
 
-    pub fn update_entities(&self, time: f32, dt: f32) -> WorldState {
+    pub fn new_with_map(entities: HashMap<String, Box<entity::BaseEntity>>) -> WorldState {
+        WorldState {
+            entities: entities,
+            time: 0.0,
+        }
+    }
+    pub fn add(&mut self, key: &str, ent: Box<entity::BaseEntity>) {
+        self.entities.insert(String::from(key), ent);
+    }
+
+    pub fn update_entities(&mut self, dt: f32) -> WorldState {
         let mut new_entities: HashMap<String, Box<entity::BaseEntity>> = HashMap::new();
         for (key, ent) in &self.entities {
-            new_entities.insert(key.clone(), (*ent).update_state(time, dt));
+            new_entities.insert(key.clone(), (*ent).update_state(self.time, dt));
         }
         let mut new_state = self.clone();
         new_state.entities = new_entities;
+        self.time += dt;
         new_state
     }
 
@@ -26,6 +41,10 @@ impl WorldState {
         for (_, ent) in &self.entities {
             ent.print();
         }
+    }
+
+    pub fn get(&self, key: String) -> Box<entity::BaseEntity> {
+        self.entities.get(&key).unwrap().clone()
     }
 }
 
@@ -37,6 +56,7 @@ impl Clone for WorldState {
             new_entities.insert(key.clone(), new_ent);
         }
         WorldState {
+            time: self.time,
             entities: new_entities,
         }
     }
@@ -51,7 +71,7 @@ impl Mul<f32> for WorldState {
             let new_ent = ent.new_entity_with_state(ent.get_next_position(_rhs));
             lerp_ents.insert(key, new_ent);
         }
-        WorldState::new(lerp_ents)
+        WorldState::new_with_map(lerp_ents)
     }
 }
 
@@ -71,6 +91,6 @@ impl Add for WorldState {
                 lerp_ents.insert(key, new_ent);
             }
         }
-        WorldState::new(lerp_ents)
+        WorldState::new_with_map(lerp_ents)
     }
 }

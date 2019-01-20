@@ -69,6 +69,16 @@ impl entity::BaseEntity for Plane {
     }
 }
 
+impl Plane {
+    pub fn get_min_point(&self) -> Vector3 {
+        return Vector3::new(self.position.x - (self.width / 2.0), self.position.y, self.position.z - (self.length / 2.0));
+    }
+
+    pub fn get_max_point(&self) -> Vector3 {
+        return Vector3::new(self.position.x + (self.width / 2.0), self.position.y, self.position.z + (self.length / 2.0));
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

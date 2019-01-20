@@ -1,6 +1,7 @@
 use entity;
 use util::math;
 use util::vector3::Vector3;
+use std::any::Any;
 
 #[derive(Debug)]
 pub struct Sphere {
@@ -76,13 +77,25 @@ impl entity::BaseEntity for Sphere {
 }
 
 impl Sphere {
-    pub fn is_collided(&self, other: Sphere) -> bool {
-        return math::detect_collide_sphere_to_sphere(
-            self.position,
-            other.position,
-            self.radius,
-            other.radius,
+    pub fn is_collided(&self, other: &dyn Any) -> bool {
+        if let Some(sphere) = other.downcast_ref::<Sphere>() {
+            return math::detect_collide_sphere_to_sphere(
+                self.position,
+                sphere.position,
+                self.radius,
+                sphere.radius,
+            );
+        } 
+        if let Some(plane) = other.downcast_ref::<entity::plane::Plane>() {
+            return math::detect_collide_sphere_to_plane(
+                self.position,
+                self.radius,
+                plane.get_min_point(),
+                plane.get_max_point(),
         );
+
+        }
+        return false;
     }
 }
 
@@ -95,6 +108,16 @@ mod tests {
         let vec = Vector3::new(1.0, 1.0, 1.0);
         let sphere1 = Sphere::new(vec, 1.0, 1.0, vec);
         let sphere2 = Sphere::new(vec, 1.0, 1.0, vec);
-        assert_eq!(true, sphere1.is_collided(sphere2));
+        assert_eq!(true, sphere1.is_collided(&sphere2));
+    }
+
+    #[test]
+    fn it_plane_collisions() {
+        let vec = Vector3::new(1.0, 1.0, 1.0);
+        let sphere1 = Sphere::new(vec, 1.0, 1.0, vec);
+        let plane1 = entity::plane::Plane::new(vec, 1.0, 1.0, 1.0);
+        assert_eq!(true, sphere1.is_collided(&plane1));
+        let plane2 = entity::plane::Plane::new (Vector3::new (4.0, 4.0, 4.0), 1.0, 1.0, 1.0);
+        assert_eq!(false, sphere1.is_collided(&plane2));
     }
 }

@@ -1,6 +1,6 @@
 language: rust
 rust:
-    - 1.29.1
+    - nightly
     - stable
 script:
     - cargo build --verbose --all

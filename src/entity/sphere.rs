@@ -76,7 +76,7 @@ impl entity::BaseEntity for Sphere {
 }
 
 impl Sphere {
-    pub fn is_collided(&self, other: Sphere) -> bool {
+    pub fn is_collided(&self, other: &Sphere) -> bool {
         return math::detect_collide_sphere_to_sphere(
             self.position,
             other.position,
@@ -95,6 +95,6 @@ mod tests {
         let vec = Vector3::new(1.0, 1.0, 1.0);
         let sphere1 = Sphere::new(vec, 1.0, 1.0, vec);
         let sphere2 = Sphere::new(vec, 1.0, 1.0, vec);
-        assert_eq!(true, sphere1.is_collided(sphere2));
+        assert_eq!(true, sphere1.is_collided(&sphere2));
     }
 }

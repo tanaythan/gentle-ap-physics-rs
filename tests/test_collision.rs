@@ -8,7 +8,7 @@ use gentle_ap_physics_rs::util::vector3::Vector3;
 use std::collections::HashMap;
 
 #[test]
-fn test_scenario_collision() {
+fn test_collision() {
     let state = Vector3::new(1.0, 1.0, 1.0);
     let init_pos_1 = Vector3::new(2.0, 2.0, 2.0);
     let init_pos_2 = Vector3::new(5.0, 2.0, 2.0);
@@ -35,14 +35,29 @@ fn test_scenario_collision() {
         Some(b) => b,
         None => panic!("asdasd"),
     };
+    let mut sphere2Box = state.get(String::from("Sphere2"));
+    let mut sphere2Entity: &Sphere = match sphere2Box.as_any().downcast_ref::<Sphere>() {
+        Some(b) => b,
+        None => panic!("asdasd"),
+    };
 
-    // assert_eq!(false, sphere1.is_collided(sphere2));
+    assert_eq!(false, sphere1Entity.is_collided(sphere2Entity));
 
     // After updates should collide
-    // state.update_entities(dt);
-    // state.update_entities(dt);
-    // state.update_entities(dt);
-    // sphere1 = Box::into_raw(all_entities.get(&sphere1_key).unwrap());
-    // sphere2 = Box::into_raw(all_entities.get(&sphere1_key).unwrap());
-    // assert_eq!(true, sphere1.is_collided(sphere2));
+    state.update_entities(dt);
+    state.update_entities(dt);
+    state.update_entities(dt);
+
+    let mut sphere1Box = state.get(String::from("Sphere1"));
+    let mut sphere1Entity: &Sphere = match sphere1Box.as_any().downcast_ref::<Sphere>() {
+        Some(b) => b,
+        None => panic!("asdasd"),
+    };
+    let mut sphere2Box = state.get(String::from("Sphere2"));
+    let mut sphere2Entity: &Sphere = match sphere2Box.as_any().downcast_ref::<Sphere>() {
+        Some(b) => b,
+        None => panic!("asdasd"),
+    };
+
+    assert_eq!(true, sphere1Entity.is_collided(sphere2Entity));
 }

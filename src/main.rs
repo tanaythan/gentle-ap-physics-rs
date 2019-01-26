@@ -3,6 +3,7 @@ mod util;
 
 use std::collections::HashMap;
 use util::vector3::Vector3;
+use util::time::duration_to_s;
 
 /* We can define physics constants here */
 const dt: f32 = 0.1;
@@ -45,10 +46,4 @@ fn main() {
             curr.clone() * alpha + prev.clone() * (1.0 - alpha);
         lerp_state.print_state();
     }
-}
-
-fn duration_to_s(duration: std::time::Duration) -> u64 {
-    let nanos = duration.subsec_nanos() as u64;
-    let s = (1000 * 1000 * 1000 * duration.as_secs() + nanos) / (1000 * 1000 * 1000);
-    s
 }

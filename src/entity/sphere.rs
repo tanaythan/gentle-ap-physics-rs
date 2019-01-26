@@ -116,10 +116,10 @@ mod tests {
     #[test]
     fn it_plane_collisions() {
         let vec = Vector3::new(1.0, 1.0, 1.0);
-        let sphere1 = Sphere::new(vec, 1.0, 1.0, vec);
-        let plane1 = entity::plane::Plane::new(vec, 1.0, 1.0, 1.0);
+        let sphere1 = Sphere::new("Sphere1".to_string(), vec, 1.0, 1.0, vec);
+        let plane1 = entity::plane::Plane::new("Plane1".to_string(), vec, 1.0, 1.0, 1.0);
         assert_eq!(true, sphere1.is_collided(&plane1));
-        let plane2 = entity::plane::Plane::new (Vector3::new (4.0, 4.0, 4.0), 1.0, 1.0, 1.0);
+        let plane2 = entity::plane::Plane::new("Plane2".to_string(), Vector3::new (4.0, 4.0, 4.0), 1.0, 1.0, 1.0);
         assert_eq!(false, sphere1.is_collided(&plane2));
     }
 }

@@ -119,7 +119,7 @@ mod tests {
         let sphere1 = Sphere::new("Sphere1".to_string(), vec, 1.0, 1.0, vec);
         let plane1 = entity::plane::Plane::new("Plane1".to_string(), vec, 1.0, 1.0, 1.0);
         assert_eq!(true, sphere1.is_collided(&plane1));
-        let plane2 = entity::plane::Plane::new("Plane2".to_string(), Vector3::new (4.0, 4.0, 4.0), 1.0, 1.0, 1.0);
+        let plane2 = entity::plane::Plane::new("Plane2".to_string(), Vector3::new(4.0, 4.0, 4.0), 1.0, 1.0, 1.0);
         assert_eq!(false, sphere1.is_collided(&plane2));
     }
 }

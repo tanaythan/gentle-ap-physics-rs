@@ -32,9 +32,29 @@ pub fn detect_collide_sphere_to_sphere(src_pos: Vector3, compare_pos: Vector3,
     sqr(src_pos.x - compare_pos.x) + sqr(src_pos.y - compare_pos.y) + sqr(src_pos.z - compare_pos.z) <= sqr(r1 + r2)
 }
 
-pub fn detect_collide_sphere_to_plane(center: f32, plane: f32, 
-                                      normal: f32) -> bool {
-    (center - plane) * normal <= 0.0
+pub fn detect_collide_sphere_to_plane(center: Vector3, radius: f32, bmin: Vector3, bmax: Vector3) -> bool {
+    //https://stackoverflow.com/questions/15247347/collision-detection-between-a-boundingbox-and-a-sphere-in-libgdx
+    let mut dmin = 0.0;
+
+    if (center.x < bmin.x) {
+        dmin += (center.x - bmin.x).powf(2.0);
+    } else if (center.x > bmax.x) {
+        dmin += (center.x - bmax.x).powf(2.0);
+    }
+
+    if (center.y < bmin.y) {
+        dmin += (center.y - bmin.y).powf(2.0);
+    } else if (center.y > bmax.y) {
+        dmin += (center.y - bmax.y).powf(2.0);
+    }
+
+    if (center.z < bmin.z) {
+        dmin += (center.z - bmin.z).powf(2.0);
+    } else if (center.z > bmax.z) {
+        dmin += (center.z - bmax.z).powf(2.0);
+    }
+
+    return dmin <= (radius).powf(2.0);
 }
 
 #[cfg(test)]
@@ -75,9 +95,12 @@ mod tests {
     assert_eq!(false, detect_collide_sphere_to_sphere(src, dst, 0.0, 0.0));
   }
 
+  /* tested elsewhere now
   #[test]
   fn it_calc_detect_collide_sphere_to_plane() {
     assert_eq!(true, detect_collide_sphere_to_plane(1.0, 1.0, 0.0));
     assert_eq!(false, detect_collide_sphere_to_plane(2.0, 1.0, 1.0));
   }
+  */
 }
+

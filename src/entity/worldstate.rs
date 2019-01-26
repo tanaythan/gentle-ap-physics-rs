@@ -54,7 +54,7 @@ impl WorldState {
 
     pub fn step(&mut self, dt: f32) {
         let mut prev = self.clone();
-        let new_time = std::time::Instant::now();
+        let new_time = Instant::now();
         let mut frame_time = 1;
         // let mut frame_time = duration_to_s(new_time.duration_since(self.time)); // from ns to s
         // if frame_time > 25 {

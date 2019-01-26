@@ -16,9 +16,9 @@ fn test_collision() {
     let v2 = Vector3::new(-1.0, 0.0, 0.0);
     let m = 1.0;
     let r = 1.0;
-    let mut sphere1 = Sphere::new(init_pos_1, m, r, v1);
-    let mut sphere2 = Sphere::new(init_pos_2, m, r, v2);
-    let plane = Plane::new(state, 1.0, 2.0, 4.0);
+    let mut sphere1 = Sphere::new(String::from("Sphere1"), init_pos_1, m, r, v1);
+    let mut sphere2 = Sphere::new(String::from("Sphere2"), init_pos_2, m, r, v2);
+    let plane = Plane::new(String::from("Plane1"), state, 1.0, 2.0, 4.0);
     let mut all_entities: HashMap<String, Box<BaseEntity>> = HashMap::new();
     let plane1_key = String::from("Plane1");
     let sphere1_key = String::from("Sphere1");

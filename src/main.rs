@@ -9,6 +9,7 @@ use entity::sphere::Sphere;
 
 /* We can define sample constants here */
 const dt: f32 = 0.1;
+const max_steps: i32 = 20;
 
 fn main() {
     //Initialize our sample entities
@@ -19,9 +20,9 @@ fn main() {
     let v2 = Vector3::new(-1.0, 0.0, 0.0);
     let m = 1.0;
     let r = 1.0;
-    let plane = Plane::new(state.clone(), 1.0, 2.0, 4.0);
-    let sphere1 = Sphere::new(init_pos_1, m, r, v1);
-    let sphere2 = Sphere::new(init_pos_2, m, r, v2);
+    let plane = Plane::new(String::from("Plane1"), state.clone(), 1.0, 2.0, 4.0);
+    let sphere1 = Sphere::new( String::from("Sphere1"), init_pos_1, m, r, v1);
+    let sphere2 = Sphere::new(String::from("Sphere2"), init_pos_2, m, r, v2);
     let mut all_entities: HashMap<String, Box<entity::BaseEntity>> = HashMap::new();
     all_entities.insert(String::from("Plane1"), Box::new(plane));
     all_entities.insert(String::from("Sphere1"), Box::new(sphere1));
@@ -30,7 +31,10 @@ fn main() {
     //Initialize sample world state
     let mut state = entity::worldstate::WorldState::new_with_map(all_entities);
 
-    loop {
-        state.step(dt)
+    let mut i = 1;
+    while i <= max_steps {
+        println!("-----------------STEP {:?}-----------------", i);
+        state.step(dt);
+        i += 1;
     }
 }

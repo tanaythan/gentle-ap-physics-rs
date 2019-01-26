@@ -3,6 +3,7 @@ use util::vector3::Vector3;
 
 #[derive(Debug)]
 pub struct Plane {
+    name: String,
     position: Vector3,
     mass: f32,
     width: f32,
@@ -10,8 +11,9 @@ pub struct Plane {
 }
 
 impl Plane {
-    pub fn new(position: Vector3, mass: f32, width: f32, length: f32) -> Plane {
+    pub fn new(name: String, position: Vector3, mass: f32, width: f32, length: f32) -> Plane {
         return Plane {
+            name: name,
             position: position,
             mass: mass,
             width: width,
@@ -22,6 +24,7 @@ impl Plane {
 impl Clone for Plane {
     fn clone(&self) -> Plane {
         Plane {
+            name: self.name.clone(),
             position: self.position.clone(),
             mass: self.mass,
             width: self.width,
@@ -76,7 +79,7 @@ mod tests {
     #[test]
     fn it_creates_a_plane() {
         let position = Vector3::new(3.0, 3.0, 4.0);
-        let plane = Plane::new(position, 5.0, 1.0, 2.0);
+        let plane = Plane::new("Plane1".to_string(), position, 5.0, 1.0, 2.0);
         let ent_state = plane.get_position();
         assert_eq!(ent_state.x, position.x);
         assert_eq!(ent_state.y, position.y);

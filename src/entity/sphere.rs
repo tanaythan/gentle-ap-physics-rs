@@ -69,7 +69,7 @@ impl entity::BaseEntity for Sphere {
     }
 
     fn get_net_acceleration(&self) -> Vector3 {
-        return Vector3::new(0.0, math::gravity(self.mass), 0.0);
+        return Vector3::new(0.0, -1.0 * math::gravity(self.mass), 0.0);
     }
 
     fn get_next_velocity(&self, dt: f32) -> Vector3 {

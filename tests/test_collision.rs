@@ -44,9 +44,8 @@ fn test_collision() {
     assert_eq!(false, sphere1Entity.is_collided(sphere2Entity));
 
     // After updates should collide
-    state.update_entities(dt);
-    state.update_entities(dt);
-    state.update_entities(dt);
+    state.step(dt);
+    state.step(dt);
 
     let mut sphere1Box = state.get(String::from("Sphere1"));
     let mut sphere1Entity: &Sphere = match sphere1Box.as_any().downcast_ref::<Sphere>() {

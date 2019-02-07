@@ -3,52 +3,38 @@ mod util;
 
 use std::collections::HashMap;
 use util::vector3::Vector3;
+use util::time::duration_to_s;
+use entity::plane::Plane;
+use entity::sphere::Sphere;
 
-/* We can define physics constants here */
+/* We can define sample constants here */
 const dt: f32 = 0.1;
+const max_steps: i32 = 20;
 
 fn main() {
-    let mut current_time = std::time::Instant::now();
-    let mut accumulator = 0.0;
-
-    //Initialize our planes and spheres
+    //Initialize our sample entities
     let state = Vector3::new(1.0, 2.0, 3.0);
-    let plane = entity::plane::Plane::new(state.clone(), 1.0, 2.0, 4.0);
+    let init_pos_1 = Vector3::new(2.0, 2.0, 2.0);
+    let init_pos_2 = Vector3::new(5.0, 2.0, 2.0);
+    let v1 = Vector3::new(1.0, 0.0, 0.0);
+    let v2 = Vector3::new(-1.0, 0.0, 0.0);
+    let m = 1.0;
+    let r = 1.0;
+    let plane = Plane::new(String::from("Plane1"), state.clone(), 1.0, 2.0, 4.0);
+    let sphere1 = Sphere::new( String::from("Sphere1"), init_pos_1, m, r, v1);
+    let sphere2 = Sphere::new(String::from("Sphere2"), init_pos_2, m, r, v2);
     let mut all_entities: HashMap<String, Box<entity::BaseEntity>> = HashMap::new();
     all_entities.insert(String::from("Plane1"), Box::new(plane));
+    all_entities.insert(String::from("Sphere1"), Box::new(sphere1));
+    all_entities.insert(String::from("Sphere2"), Box::new(sphere2));
 
-    //Initialize world states
-    let mut prev = entity::worldstate::WorldState::new_with_map(all_entities.clone());
-    let mut curr = entity::worldstate::WorldState::new_with_map(all_entities);
+    //Initialize sample world state
+    let mut state = entity::worldstate::WorldState::new_with_map(all_entities);
 
-    loop {
-        let new_time = std::time::Instant::now();
-        let mut frame_time = duration_to_s(new_time.duration_since(current_time)); // from ns to s
-        if frame_time > 25 {
-            // where did this constant come from?
-            frame_time = 25;
-        }
-        current_time = new_time;
-
-        accumulator += frame_time as f32;
-
-        while accumulator >= dt {
-            prev = curr.clone();
-            curr = curr.update_entities(dt);
-            accumulator -= dt;
-        }
-
-        // Need to implement add overload for world state
-
-        let alpha = accumulator / dt;
-        let lerp_state: entity::worldstate::WorldState =
-            curr.clone() * alpha + prev.clone() * (1.0 - alpha);
-        lerp_state.print_state();
+    let mut i = 1;
+    while i <= max_steps {
+        println!("-----------------STEP {:?}-----------------", i);
+        state.step(dt);
+        i += 1;
     }
-}
-
-fn duration_to_s(duration: std::time::Duration) -> u64 {
-    let nanos = duration.subsec_nanos() as u64;
-    let s = (1000 * 1000 * 1000 * duration.as_secs() + nanos) / (1000 * 1000 * 1000);
-    s
 }

@@ -5,6 +5,7 @@ use std::any::Any;
 
 #[derive(Debug)]
 pub struct Sphere {
+    name: String,
     position: Vector3,
     mass: f32,
     radius: f32,
@@ -12,8 +13,9 @@ pub struct Sphere {
 }
 
 impl Sphere {
-    pub fn new(position: Vector3, mass: f32, radius: f32, velocity: Vector3) -> Sphere {
+    pub fn new(name: String, position: Vector3, mass: f32, radius: f32, velocity: Vector3) -> Sphere {
         return Sphere {
+            name: name,
             position: position,
             mass: mass,
             radius: radius,
@@ -25,6 +27,7 @@ impl Sphere {
 impl Clone for Sphere {
     fn clone(&self) -> Sphere {
         Sphere {
+            name: self.name.clone(),
             position: self.position,
             mass: self.mass,
             radius: self.radius,
@@ -67,7 +70,7 @@ impl entity::BaseEntity for Sphere {
     }
 
     fn get_net_acceleration(&self) -> Vector3 {
-        return Vector3::new(0.0, math::gravity(self.mass), 0.0);
+        return Vector3::new(0.0, -1.0 * math::gravity(self.mass), 0.0);
     }
 
     fn get_next_velocity(&self, dt: f32) -> Vector3 {
@@ -92,8 +95,7 @@ impl Sphere {
                 self.radius,
                 plane.get_min_point(),
                 plane.get_max_point(),
-        );
-
+            );
         }
         return false;
     }
@@ -106,18 +108,18 @@ mod tests {
     #[test]
     fn it_is_collided() {
         let vec = Vector3::new(1.0, 1.0, 1.0);
-        let sphere1 = Sphere::new(vec, 1.0, 1.0, vec);
-        let sphere2 = Sphere::new(vec, 1.0, 1.0, vec);
+        let sphere1 = Sphere::new("Sphere1".to_string(), vec, 1.0, 1.0, vec);
+        let sphere2 = Sphere::new("Sphere2".to_string(), vec, 1.0, 1.0, vec);
         assert_eq!(true, sphere1.is_collided(&sphere2));
     }
 
     #[test]
     fn it_plane_collisions() {
         let vec = Vector3::new(1.0, 1.0, 1.0);
-        let sphere1 = Sphere::new(vec, 1.0, 1.0, vec);
-        let plane1 = entity::plane::Plane::new(vec, 1.0, 1.0, 1.0);
+        let sphere1 = Sphere::new("Sphere1".to_string(), vec, 1.0, 1.0, vec);
+        let plane1 = entity::plane::Plane::new("Plane1".to_string(), vec, 1.0, 1.0, 1.0);
         assert_eq!(true, sphere1.is_collided(&plane1));
-        let plane2 = entity::plane::Plane::new (Vector3::new (4.0, 4.0, 4.0), 1.0, 1.0, 1.0);
+        let plane2 = entity::plane::Plane::new("Plane2".to_string(), Vector3::new(4.0, 4.0, 4.0), 1.0, 1.0, 1.0);
         assert_eq!(false, sphere1.is_collided(&plane2));
     }
 }

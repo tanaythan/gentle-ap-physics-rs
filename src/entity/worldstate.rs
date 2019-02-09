@@ -7,6 +7,7 @@ use std::time::Instant;
 use util::time::duration_to_s;
 use util::vector3::Vector3;
 
+#[derive(Clone)]
 pub struct WorldState {
     time: Instant,
     accumulator: f32,
@@ -38,6 +39,15 @@ impl WorldState {
         let mut new_entities: HashMap<String, Entity> = HashMap::new();
         for (key, ent) in &self.entities {
             new_entities.insert(key.clone(), (*ent).update_state(self.accumulator, dt));
+        }
+
+        for (key, ent) in &self.entities {
+            for (key2, ent2) in &self.entities {
+                if key == key2 {
+                    continue;
+                }
+                ent.is_collided(ent2.clone()); // TODO: Something here
+            }
         }
         self.entities = new_entities;
     }
@@ -75,21 +85,6 @@ impl WorldState {
         let alpha = self.accumulator / dt;
         let lerp_state: WorldState = self.clone() * alpha + prev.clone() * (1.0 - alpha);
         lerp_state.print_state();
-    }
-}
-
-impl Clone for WorldState {
-    fn clone(&self) -> WorldState {
-        let mut new_entities: HashMap<String, Entity> = HashMap::new();
-        for (key, ent) in &self.entities {
-            let new_ent = ent.clone();
-            new_entities.insert(key.clone(), new_ent);
-        }
-        WorldState {
-            time: self.time,
-            entities: new_entities,
-            accumulator: self.accumulator,
-        }
     }
 }
 

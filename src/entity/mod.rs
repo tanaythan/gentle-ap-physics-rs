@@ -1,7 +1,6 @@
 pub mod plane;
 pub mod sphere;
 pub mod worldstate;
-use std::any::Any;
 use util::vector3::Vector3;
 
 pub trait BaseEntity: BaseEntityClone {
@@ -18,7 +17,6 @@ pub trait BaseEntity: BaseEntityClone {
 
 pub trait BaseEntityClone {
     fn clone_box(&self) -> Box<BaseEntity>;
-    fn as_any(&self) -> &dyn Any;
 }
 
 impl<T> BaseEntityClone for T
@@ -27,10 +25,6 @@ where
 {
     fn clone_box(&self) -> Box<BaseEntity> {
         Box::new(self.clone())
-    }
-
-    fn as_any(&self) -> &dyn Any {
-        self
     }
 }
 
@@ -49,7 +43,7 @@ pub enum Entity {
 impl Entity {
     pub fn is_collided(&self, ent: Entity) -> bool {
         match self {
-            Entity::Plane(_) => true,
+            Entity::Plane(plane) => plane.is_collided(ent),
             Entity::Sphere(sphere) => sphere.is_collided(ent),
         }
     }

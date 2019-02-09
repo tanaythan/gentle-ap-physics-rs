@@ -45,6 +45,10 @@ impl Sphere {
             ),
         }
     }
+
+    pub fn get_radius(&self) -> f32 {
+        self.radius
+    }
 }
 
 impl entity::BaseEntity for Sphere {

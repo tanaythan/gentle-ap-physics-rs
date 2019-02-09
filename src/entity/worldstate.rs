@@ -1,16 +1,16 @@
 use entity::BaseEntity;
-use entity::sphere::Sphere;
+use entity::Entity;
 use std::collections::HashMap;
 use std::ops::Add;
 use std::ops::Mul;
-use util::vector3::Vector3;
-use util::time::duration_to_s;
 use std::time::Instant;
+use util::time::duration_to_s;
+use util::vector3::Vector3;
 
 pub struct WorldState {
     time: Instant,
     accumulator: f32,
-    entities: HashMap<String, Box<BaseEntity>>,
+    entities: HashMap<String, Entity>,
 }
 
 impl WorldState {
@@ -18,24 +18,24 @@ impl WorldState {
         WorldState {
             entities: HashMap::new(),
             time: Instant::now(),
-            accumulator: 0.0
+            accumulator: 0.0,
         }
     }
 
-    pub fn new_with_map(entities: HashMap<String, Box<BaseEntity>>) -> WorldState {
+    pub fn new_with_map(entities: HashMap<String, Entity>) -> WorldState {
         WorldState {
             entities: entities,
             time: Instant::now(),
-            accumulator: 0.0
+            accumulator: 0.0,
         }
     }
 
-    pub fn add(&mut self, key: &str, ent: Box<BaseEntity>) {
+    pub fn add(&mut self, key: &str, ent: Entity) {
         self.entities.insert(String::from(key), ent);
     }
 
     pub fn update_entities(&mut self, dt: f32) {
-        let mut new_entities: HashMap<String, Box<BaseEntity>> = HashMap::new();
+        let mut new_entities: HashMap<String, Entity> = HashMap::new();
         for (key, ent) in &self.entities {
             new_entities.insert(key.clone(), (*ent).update_state(self.accumulator, dt));
         }
@@ -48,7 +48,7 @@ impl WorldState {
         }
     }
 
-    pub fn get(&self, key: String) -> Box<BaseEntity> {
+    pub fn get(&self, key: String) -> Entity {
         self.entities.get(&key).unwrap().clone()
     }
 
@@ -80,7 +80,7 @@ impl WorldState {
 
 impl Clone for WorldState {
     fn clone(&self) -> WorldState {
-        let mut new_entities: HashMap<String, Box<BaseEntity>> = HashMap::new();
+        let mut new_entities: HashMap<String, Entity> = HashMap::new();
         for (key, ent) in &self.entities {
             let new_ent = ent.clone();
             new_entities.insert(key.clone(), new_ent);
@@ -88,7 +88,7 @@ impl Clone for WorldState {
         WorldState {
             time: self.time,
             entities: new_entities,
-            accumulator: self.accumulator
+            accumulator: self.accumulator,
         }
     }
 }
@@ -97,7 +97,7 @@ impl Mul<f32> for WorldState {
     type Output = WorldState;
 
     fn mul(self, _rhs: f32) -> WorldState {
-        let mut lerp_ents = HashMap::<String, Box<BaseEntity>>::new();
+        let mut lerp_ents = HashMap::<String, Entity>::new();
         for (key, ent) in self.entities {
             let new_ent = ent.new_entity_with_state(ent.get_next_position(_rhs));
             lerp_ents.insert(key, new_ent);
@@ -110,13 +110,13 @@ impl Add for WorldState {
     type Output = WorldState;
 
     fn add(self, other: WorldState) -> WorldState {
-        let mut lerp_ents = HashMap::<String, Box<BaseEntity>>::new();
+        let mut lerp_ents = HashMap::<String, Entity>::new();
         for (key, ent) in self.entities {
             let other_ent = other.entities.get(&key);
             if other_ent.is_none() {
                 lerp_ents.insert(key, ent);
             } else {
-                let new_pos = *(*ent).get_position() + *(*other_ent.unwrap()).get_position();
+                let new_pos = *(ent).get_position() + *(other_ent.unwrap()).get_position();
                 let mut new_ent = ent.clone();
                 new_ent.set_position(new_pos);
                 lerp_ents.insert(key, new_ent);
@@ -128,29 +128,26 @@ impl Add for WorldState {
 
 #[cfg(test)]
 mod tests {
-  use super::*;
-  
-  #[test]
-  fn it_update_entities() {
-    let init_pos_1 = Vector3::new(2.0, 2.0, 2.0);
-    let v1 = Vector3::new(1.0, 1.0, 1.0);
-    let m = 1.0;
-    let r = 1.0;
-    let mut sphere1 = Sphere::new(String::from("Sphere1"), init_pos_1, m, r, v1);
-    let mut all_entities: HashMap<String, Box<BaseEntity>> = HashMap::new();
-    all_entities.insert(String::from("Sphere1"), Box::new(sphere1));
-    let mut state = WorldState::new_with_map(all_entities);
+    use super::*;
+    use entity::sphere::Sphere;
 
-    let dt = 1.0;
-    state.update_entities(dt);
+    #[test]
+    fn it_update_entities() {
+        let init_pos_1 = Vector3::new(2.0, 2.0, 2.0);
+        let v1 = Vector3::new(1.0, 1.0, 1.0);
+        let m = 1.0;
+        let r = 1.0;
+        let mut sphere1 = Sphere::new(String::from("Sphere1"), init_pos_1, m, r, v1);
+        let mut all_entities: HashMap<String, Entity> = HashMap::new();
+        all_entities.insert(String::from("Sphere1"), Entity::Sphere(sphere1));
+        let mut state = WorldState::new_with_map(all_entities);
 
-    let mut sphere1Box = state.get(String::from("Sphere1"));
-    let mut sphere1Entity: &Sphere = match sphere1Box.as_any().downcast_ref::<Sphere>() {
-        Some(b) => b,
-        None => panic!("asdasd"),
-    };
+        let dt = 1.0;
+        state.update_entities(dt);
 
-    let expected = Vector3::new(3.0, -16.6, 3.0);
-    assert_eq!(&expected, sphere1Entity.get_position());
-  }
+        let mut sphere1Box = state.get(String::from("Sphere1"));
+
+        let expected = Vector3::new(3.0, -16.6, 3.0);
+        assert_eq!(&expected, sphere1Box.get_position());
+    }
 }

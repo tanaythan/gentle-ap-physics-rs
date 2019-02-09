@@ -1,11 +1,13 @@
+#![allow(dead_code)]
 mod entity;
 mod util;
 
-use std::collections::HashMap;
-use util::vector3::Vector3;
-use util::time::duration_to_s;
 use entity::plane::Plane;
 use entity::sphere::Sphere;
+use entity::Entity;
+use std::collections::HashMap;
+use util::time::duration_to_s;
+use util::vector3::Vector3;
 
 /* We can define sample constants here */
 const dt: f32 = 0.1;
@@ -21,12 +23,12 @@ fn main() {
     let m = 1.0;
     let r = 1.0;
     let plane = Plane::new(String::from("Plane1"), state.clone(), 1.0, 2.0, 4.0);
-    let sphere1 = Sphere::new( String::from("Sphere1"), init_pos_1, m, r, v1);
+    let sphere1 = Sphere::new(String::from("Sphere1"), init_pos_1, m, r, v1);
     let sphere2 = Sphere::new(String::from("Sphere2"), init_pos_2, m, r, v2);
-    let mut all_entities: HashMap<String, Box<entity::BaseEntity>> = HashMap::new();
-    all_entities.insert(String::from("Plane1"), Box::new(plane));
-    all_entities.insert(String::from("Sphere1"), Box::new(sphere1));
-    all_entities.insert(String::from("Sphere2"), Box::new(sphere2));
+    let mut all_entities: HashMap<String, Entity> = HashMap::new();
+    all_entities.insert(String::from("Plane1"), Entity::Plane(plane));
+    all_entities.insert(String::from("Sphere1"), Entity::Sphere(sphere1));
+    all_entities.insert(String::from("Sphere2"), Entity::Sphere(sphere2));
 
     //Initialize sample world state
     let mut state = entity::worldstate::WorldState::new_with_map(all_entities);

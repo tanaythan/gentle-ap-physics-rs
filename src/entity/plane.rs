@@ -1,7 +1,8 @@
 use entity;
+use entity::Entity;
 use util::vector3::Vector3;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Plane {
     name: String,
     position: Vector3,
@@ -19,17 +20,6 @@ impl Plane {
             width: width,
             length: length,
         };
-    }
-}
-impl Clone for Plane {
-    fn clone(&self) -> Plane {
-        Plane {
-            name: self.name.clone(),
-            position: self.position.clone(),
-            mass: self.mass,
-            width: self.width,
-            length: self.length,
-        }
     }
 }
 
@@ -50,13 +40,13 @@ impl entity::BaseEntity for Plane {
         self.position
     }
 
-    fn new_entity_with_state(&self, entity: Vector3) -> Box<entity::BaseEntity> {
+    fn new_entity_with_state(&self, entity: Vector3) -> Entity {
         let plane = self.clone();
-        Box::new(plane)
+        Entity::Plane(plane)
     }
 
-    fn update_state(&self, t: f32, dt: f32) -> Box<entity::BaseEntity> {
-        Box::new(self.clone())
+    fn update_state(&self, t: f32, dt: f32) -> Entity {
+        Entity::Plane(self.clone())
     }
 
     fn print(&self) {
@@ -74,11 +64,19 @@ impl entity::BaseEntity for Plane {
 
 impl Plane {
     pub fn get_min_point(&self) -> Vector3 {
-        return Vector3::new(self.position.x - (self.width / 2.0), self.position.y, self.position.z - (self.length / 2.0));
+        return Vector3::new(
+            self.position.x - (self.width / 2.0),
+            self.position.y,
+            self.position.z - (self.length / 2.0),
+        );
     }
 
     pub fn get_max_point(&self) -> Vector3 {
-        return Vector3::new(self.position.x + (self.width / 2.0), self.position.y, self.position.z + (self.length / 2.0));
+        return Vector3::new(
+            self.position.x + (self.width / 2.0),
+            self.position.y,
+            self.position.z + (self.length / 2.0),
+        );
     }
 }
 

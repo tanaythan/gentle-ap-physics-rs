@@ -3,6 +3,10 @@ use entity::Entity;
 use util::math;
 use util::vector3::Vector3;
 
+fn get_g_force(mass: f32) -> Vector3 {
+    return Vector3::new(0.0, -1.0 * math::gravity(mass), 0.0);
+}
+
 #[derive(Debug, Clone)]
 pub struct Sphere {
     name: String,
@@ -10,6 +14,7 @@ pub struct Sphere {
     mass: f32,
     radius: f32,
     velocity: Vector3,
+    forces: Vec<Vector3>
 }
 
 impl Sphere {
@@ -26,6 +31,7 @@ impl Sphere {
             mass: mass,
             radius: radius,
             velocity: velocity,
+            forces: [get_g_force(mass)].to_vec()
         };
     }
 
@@ -85,12 +91,20 @@ impl entity::BaseEntity for Sphere {
     }
 
     fn get_net_acceleration(&self) -> Vector3 {
-        return Vector3::new(0.0, -1.0 * math::gravity(self.mass), 0.0);
+        let mut a = Vector3::new(0.0, 0.0, 0.0);
+        for f in &self.forces {
+            a = a + *f;
+        }
+        return a;
     }
 
     fn get_next_velocity(&self, dt: f32) -> Vector3 {
         let net_accel = self.get_net_acceleration();
         return math::velocity_from_acc(self.velocity, net_accel, dt);
+    }
+
+    fn apply_force(&mut self, f: Vector3) {
+        self.forces.push(f)
     }
 }
 
@@ -98,6 +112,8 @@ impl entity::BaseEntity for Sphere {
 mod tests {
     use super::*;
     use entity::sphere::Sphere;
+    use entity::BaseEntity;
+
     #[test]
     fn it_is_collided() {
         let vec = Vector3::new(1.0, 1.0, 1.0);
@@ -120,5 +136,16 @@ mod tests {
             1.0,
         );
         assert_eq!(false, sphere1.is_collided(Entity::Plane(plane2)));
+    }
+
+    #[test]
+    fn it_apply_force() {
+        let m = 1.0;
+        let vec = Vector3::new(1.0, 1.0, 1.0);
+        let mut sphere1 = Sphere::new("Sphere1".to_string(), vec, m, 1.0, vec);
+        let f = Vector3::new(1.0, 0.0, 1.0);
+        sphere1.apply_force(f);
+        let expected = f + get_g_force(m);
+        assert_eq!(expected, sphere1.get_net_acceleration());
     }
 }

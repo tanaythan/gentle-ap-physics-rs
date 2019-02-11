@@ -89,6 +89,10 @@ impl entity::BaseEntity for Plane {
     fn get_next_velocity(&self, dt: f32) -> Vector3 {
         return Vector3::new(0.0, 0.0, 0.0);
     }
+
+    fn apply_force(&mut self, f: Vector3) {
+        return
+    }
 }
 
 #[cfg(test)]

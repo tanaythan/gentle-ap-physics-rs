@@ -1,6 +1,7 @@
 use entity;
 use entity::Entity;
 use entity::BaseEntity;
+use entity::plane::Plane;
 use util::math;
 use util::vector3::Vector3;
 
@@ -58,9 +59,14 @@ impl Sphere {
     }
 
     pub fn collide_with_sphere (&mut self, mut other: &mut Sphere) {
-        let force = math::calculate_impulse_force (&self, &other);
+        let force = math::calculate_impulse_force_between_spheres (&self, &other);
         self.apply_force (force);
         other.apply_force (force * -1.0);
+    }
+
+    pub fn collide_with_plane (&mut self, other: Plane) {
+        let force = math::calculate_impulse_force_sphere_plane (&self, &other);
+        self.apply_force (force);
     }
 
     pub fn get_velocity(&self) -> Vector3 {

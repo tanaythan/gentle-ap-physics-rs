@@ -1,10 +1,12 @@
 use super::vector3::Vector3;
 use entity::sphere::Sphere;
+use entity::plane::Plane;
 use entity::BaseEntity;
+
 
 const COEFFICIENT_OF_FRICTION: f32 = 0.05;
 const ACC_GRAVITY: f32 = 9.8;
-const COEFFICITION_OF_RESTITUTION_SPHERE: f32 = 1.0;
+const COEFFICIENT_OF_RESTITUTION: f32 = 0.5;
 
 pub fn friction(f: f32) -> f32 {
     COEFFICIENT_OF_FRICTION * f
@@ -60,13 +62,29 @@ pub fn detect_collide_sphere_to_plane(center: Vector3, radius: f32, bmin: Vector
     return dmin <= (radius).powf(2.0);
 }
 
-pub fn calculate_impulse_force(sphere1: &Sphere, sphere2: &Sphere) -> Vector3 {
+pub fn calculate_impulse_force_between_spheres(sphere1: &Sphere, sphere2: &Sphere) -> Vector3 {
     //finally found formula at
     //https://www.gamasutra.com/view/feature/3168/physics_on_the_back_of_a_cocktail_.php?print=1
     let relative_velocity = sphere1.get_velocity() - sphere2.get_velocity();
+    
+    //direction that sphere1 collides with sphere2
     let dir_of_impact = Vector3::new(sphere2.get_position().x - sphere1.get_position().x, sphere2.get_position().y - sphere1.get_position().y, sphere1.get_position().z - sphere2.get_position().z).normalized();
-    let numerator = (relative_velocity * -(1.0 + COEFFICITION_OF_RESTITUTION_SPHERE)).dot_product(dir_of_impact);
+
+    let numerator = (relative_velocity * -(1.0 + COEFFICIENT_OF_RESTITUTION)).dot_product(dir_of_impact);
     return dir_of_impact * (numerator * (1.0 / ((1.0 / sphere1.get_mass()) + (1.0 / sphere2.get_mass ()))));
+}
+
+pub fn calculate_impulse_force_sphere_plane (sphere: &Sphere, plane: &Plane) -> Vector3 {
+    //for now plane can't move
+    let vel = sphere.get_velocity();
+
+    //for now sphere can only collide with plane going straight down
+    let dir_of_impact = Vector3::new (0.0, -1.0, 0.0);      
+
+    let numerator = (vel * -(1.0 + COEFFICIENT_OF_RESTITUTION)).dot_product(dir_of_impact);
+
+    //for not simulating mass of plane as infinite
+    return dir_of_impact * (numerator * (1.0 / (1.0 / sphere.get_mass())));
 }
 
 #[cfg(test)]

@@ -125,12 +125,21 @@ mod tests {
     assert_eq!(false, detect_collide_sphere_to_sphere(src, dst, 0.0, 0.0));
   }
 
+  #[test] 
+  fn it_calc_force_sphere_sphere_collision () {
+    let sphere1 = Sphere::new (String::from("Sphere1"), Vector3::new(0.0, 0.0, 0.0), 1.0, 1.0, Vector3::new(1.0, 0.0, 0.0));
+    let sphere2 = Sphere::new (String::from("Sphere2"), Vector3::new(1.0, 0.0, 0.0), 1.0, 1.0, Vector3::new (0.0, 0.0, 0.0));
+    let force = calculate_impulse_force_between_spheres (&sphere1, &sphere2);
+    assert_eq!(force, Vector3::new(-(0.25 + COEFFICIENT_OF_RESTITUTION), 0.0, 0.0));
+
+  }
+
   #[test]
   fn it_calc_force_sphere_plane_collision (){
-    let sphere1 = Sphere::new ("Sphere1", Vector3::new(0.0, 1.0, 0.0), 1.0, 1.0, Vector3::new(0.0, -1.0, 0.0));
-    let plane1 = Plane::new ("Plane1", Vector3:new(0.0, 0.0, 0.0), 1.0, 10.0, 10.0);
+    let sphere1 = Sphere::new (String::from("Sphere1"), Vector3::new(0.0, 1.0, 0.0), 1.0, 1.0, Vector3::new(0.0, -1.0, 0.0));
+    let plane1 = Plane::new (String::from("Plane1"), Vector3::new(0.0, 0.0, 0.0), 1.0, 10.0, 10.0);
     let force = calculate_impulse_force_sphere_plane (&sphere1, &plane1);
-    assert_eq!(force, Vector3::new(0, 0.5, 0.0);
+    assert_eq!(force, Vector3::new(0.0, 1.0 + COEFFICIENT_OF_RESTITUTION, 0.0));
   }
 
   /* tested elsewhere now

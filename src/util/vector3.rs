@@ -62,4 +62,17 @@ impl Vector3 {
     pub fn new(x: f32, y: f32, z: f32) -> Vector3 {
         return Vector3 { x: x, y: y, z: z };
     }
+
+    pub fn magnitude (&self) -> f32 {
+        return (self.x * self.x + self.y * self.y + self.z * self.z).sqrt();
+    }
+
+    pub fn normalized (&self) -> Vector3 {
+        let mag = self.magnitude();
+        return Vector3::new (self.x / mag, self.y / mag, self.z / mag);
+    }
+
+    pub fn dot_product (&self, other: Vector3) -> f32 {
+        return self.x * other.x + self.y * other.y + self.z * other.z;
+    }
 }

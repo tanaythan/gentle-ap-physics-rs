@@ -13,6 +13,7 @@ pub trait BaseEntity: BaseEntityClone {
     fn print(&self);
     fn get_net_acceleration(&self) -> Vector3;
     fn get_next_velocity(&self, dt: f32) -> Vector3;
+    fn apply_force(&mut self, Vector3);
 }
 
 pub trait BaseEntityClone {
@@ -56,12 +57,14 @@ impl BaseEntity for Entity {
             Entity::Sphere(sphere) => sphere.set_position(vec),
         }
     }
+
     fn get_position(&self) -> &Vector3 {
         match self {
             Entity::Plane(plane) => plane.get_position(),
             Entity::Sphere(sphere) => sphere.get_position(),
         }
     }
+
     fn get_mass(&self) -> f32 {
         match self {
             Entity::Plane(plane) => plane.get_mass(),
@@ -96,16 +99,25 @@ impl BaseEntity for Entity {
             Entity::Sphere(sphere) => sphere.print(),
         }
     }
+
     fn get_net_acceleration(&self) -> Vector3 {
         match self {
             Entity::Plane(plane) => plane.get_net_acceleration(),
             Entity::Sphere(sphere) => sphere.get_net_acceleration(),
         }
     }
+
     fn get_next_velocity(&self, dt: f32) -> Vector3 {
         match self {
             Entity::Plane(plane) => plane.get_next_velocity(dt),
             Entity::Sphere(sphere) => sphere.get_next_velocity(dt),
+        }
+    }
+
+    fn apply_force(&mut self, f: Vector3) {
+        match self {
+            Entity::Plane(plane) => plane.apply_force(f),
+            Entity::Sphere(sphere) => sphere.apply_force(f),
         }
     }
 }

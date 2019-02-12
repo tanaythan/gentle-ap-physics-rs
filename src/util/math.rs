@@ -125,6 +125,14 @@ mod tests {
     assert_eq!(false, detect_collide_sphere_to_sphere(src, dst, 0.0, 0.0));
   }
 
+  #[test]
+  fn it_calc_force_sphere_plane_collision (){
+    let sphere1 = Sphere::new ("Sphere1", Vector3::new(0.0, 1.0, 0.0), 1.0, 1.0, Vector3::new(0.0, -1.0, 0.0));
+    let plane1 = Plane::new ("Plane1", Vector3:new(0.0, 0.0, 0.0), 1.0, 10.0, 10.0);
+    let force = calculate_impulse_force_sphere_plane (&sphere1, &plane1);
+    assert_eq!(force, Vector3::new(0, 0.5, 0.0);
+  }
+
   /* tested elsewhere now
   #[test]
   fn it_calc_detect_collide_sphere_to_plane() {

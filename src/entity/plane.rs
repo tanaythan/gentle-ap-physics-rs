@@ -91,7 +91,7 @@ impl entity::BaseEntity for Plane {
     }
 
     fn apply_force(&mut self, f: Vector3) {
-        return
+        return;
     }
 }
 

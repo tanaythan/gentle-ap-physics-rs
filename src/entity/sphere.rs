@@ -1,7 +1,7 @@
 use entity;
-use entity::Entity;
-use entity::BaseEntity;
 use entity::plane::Plane;
+use entity::BaseEntity;
+use entity::Entity;
 use util::math;
 use util::vector3::Vector3;
 
@@ -16,7 +16,7 @@ pub struct Sphere {
     mass: f32,
     radius: f32,
     velocity: Vector3,
-    forces: Vec<Vector3>
+    forces: Vec<Vector3>,
 }
 
 impl Sphere {
@@ -33,7 +33,7 @@ impl Sphere {
             mass: mass,
             radius: radius,
             velocity: velocity,
-            forces: [get_g_force(mass)].to_vec()
+            forces: [get_g_force(mass)].to_vec(),
         };
     }
 
@@ -58,15 +58,15 @@ impl Sphere {
         self.radius
     }
 
-    pub fn collide_with_sphere (&mut self, mut other: &mut Sphere) {
-        let force = math::calculate_impulse_force_between_spheres (&self, &other);
-        self.apply_force (force);
-        other.apply_force (force * -1.0);
+    pub fn collide_with_sphere(&mut self, mut other: &mut Sphere) {
+        let force = math::calculate_impulse_force_between_spheres(&self, &other);
+        self.apply_force(force);
+        other.apply_force(force * -1.0);
     }
 
-    pub fn collide_with_plane (&mut self, other: Plane) {
-        let force = math::calculate_impulse_force_sphere_plane (&self, &other);
-        self.apply_force (force);
+    pub fn collide_with_plane(&mut self, other: Plane) {
+        let force = math::calculate_impulse_force_sphere_plane(&self, &other);
+        self.apply_force(force);
     }
 
     pub fn get_velocity(&self) -> Vector3 {

@@ -1,5 +1,5 @@
-use std::ops;
 use std::cmp;
+use std::ops;
 
 #[derive(Debug, Copy)]
 pub struct Vector3 {
@@ -26,7 +26,6 @@ impl ops::Add<Vector3> for Vector3 {
     }
 }
 
-
 impl ops::Sub<Vector3> for Vector3 {
     type Output = Vector3;
 
@@ -52,7 +51,6 @@ impl ops::Div<f32> for Vector3 {
 }
 
 impl cmp::PartialEq<Vector3> for Vector3 {
-
     fn eq(&self, other: &Vector3) -> bool {
         return self.x == other.x && self.y == other.y && self.z == other.z;
     }
@@ -63,16 +61,16 @@ impl Vector3 {
         return Vector3 { x: x, y: y, z: z };
     }
 
-    pub fn magnitude (&self) -> f32 {
+    pub fn magnitude(&self) -> f32 {
         return (self.x * self.x + self.y * self.y + self.z * self.z).sqrt();
     }
 
-    pub fn normalized (&self) -> Vector3 {
+    pub fn normalized(&self) -> Vector3 {
         let mag = self.magnitude();
-        return Vector3::new (self.x / mag, self.y / mag, self.z / mag);
+        return Vector3::new(self.x / mag, self.y / mag, self.z / mag);
     }
 
-    pub fn dot_product (&self, other: Vector3) -> f32 {
+    pub fn dot_product(&self, other: Vector3) -> f32 {
         return self.x * other.x + self.y * other.y + self.z * other.z;
     }
 }

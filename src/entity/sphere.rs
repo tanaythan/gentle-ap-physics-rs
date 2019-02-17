@@ -62,7 +62,7 @@ impl Sphere {
         let force = math::calculate_impulse_force_between_spheres(&self, &other);
         self.apply_force(force);
     
-        //Considering n^2 algorithm, removed line bc applied force twice
+        //other is a clone, no need to apply
         //other.apply_force(force * -1.0);
     }
 

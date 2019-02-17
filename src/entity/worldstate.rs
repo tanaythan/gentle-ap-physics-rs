@@ -46,7 +46,9 @@ impl WorldState {
                 if key == key2 {
                     continue;
                 }
-                ent.is_collided(ent2.clone()); // TODO: Something here
+                if (ent.is_collided(ent2.clone())) {
+                    ent.collide_with_entity (*ent2);
+                }
             }
         }
         self.entities = new_entities;

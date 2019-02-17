@@ -14,6 +14,7 @@ pub trait BaseEntity: BaseEntityClone {
     fn get_net_acceleration(&self) -> Vector3;
     fn get_next_velocity(&self, dt: f32) -> Vector3;
     fn apply_force(&mut self, Vector3);
+    fn collide_with_entity(&mut self, other: Entity);
 }
 
 pub trait BaseEntityClone {
@@ -118,6 +119,13 @@ impl BaseEntity for Entity {
         match self {
             Entity::Plane(plane) => plane.apply_force(f),
             Entity::Sphere(sphere) => sphere.apply_force(f),
+        }
+    }
+
+    fn collide_with_entity(&mut self, other: Entity) {
+        match self {
+            Entity::Plane(plane) => plane.collide_with_entity(other),
+            Entity::Sphere(sphere) => sphere.collide_with_entity(other),
         }
     }
 }

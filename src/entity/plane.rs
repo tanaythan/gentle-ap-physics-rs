@@ -93,6 +93,10 @@ impl entity::BaseEntity for Plane {
     fn apply_force(&mut self, f: Vector3) {
         return;
     }
+
+    fn collide_with_entity(&mut self, other: Entity) {
+        return;
+    }
 }
 
 #[cfg(test)]

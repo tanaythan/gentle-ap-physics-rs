@@ -61,7 +61,9 @@ impl Sphere {
     pub fn collide_with_sphere(&mut self, mut other: &mut Sphere) {
         let force = math::calculate_impulse_force_between_spheres(&self, &other);
         self.apply_force(force);
-        other.apply_force(force * -1.0);
+    
+        //Considering n^2 algorithm, removed line bc applied force twice
+        //other.apply_force(force * -1.0);
     }
 
     pub fn collide_with_plane(&mut self, other: Plane) {
@@ -122,6 +124,13 @@ impl entity::BaseEntity for Sphere {
 
     fn apply_force(&mut self, f: Vector3) {
         self.forces.push(f)
+    }
+
+    fn collide_with_entity (&mut self, other: Entity) {
+        match other {
+            Entity::Sphere(mut sphere) => self.collide_with_sphere(&mut sphere),
+            Entity::Plane(plane) => self.collide_with_plane(plane),
+        }
     }
 }
 

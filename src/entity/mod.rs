@@ -3,7 +3,7 @@ pub mod sphere;
 pub mod worldstate;
 use util::vector3::Vector3;
 
-pub trait BaseEntity: BaseEntityClone {
+pub trait BaseEntity {
     fn set_position(&mut self, Vector3);
     fn get_position(&self) -> &Vector3;
     fn get_mass(&self) -> f32;
@@ -17,25 +17,6 @@ pub trait BaseEntity: BaseEntityClone {
     fn collide_with_entity(&mut self, other: Entity);
 }
 
-pub trait BaseEntityClone {
-    fn clone_box(&self) -> Box<BaseEntity>;
-}
-
-impl<T> BaseEntityClone for T
-where
-    T: 'static + BaseEntity + Clone,
-{
-    fn clone_box(&self) -> Box<BaseEntity> {
-        Box::new(self.clone())
-    }
-}
-
-impl Clone for Box<BaseEntity> {
-    fn clone(&self) -> Box<BaseEntity> {
-        self.clone_box()
-    }
-}
-
 #[derive(Clone)]
 pub enum Entity {
     Plane(plane::Plane),
@@ -43,7 +24,7 @@ pub enum Entity {
 }
 
 impl Entity {
-    pub fn is_collided(&self, ent: Entity) -> bool {
+    pub fn is_collided(&self, ent: &Entity) -> bool {
         match self {
             Entity::Plane(plane) => plane.is_collided(ent),
             Entity::Sphere(sphere) => sphere.is_collided(ent),

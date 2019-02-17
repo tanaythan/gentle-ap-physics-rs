@@ -50,21 +50,21 @@ pub fn detect_collide_sphere_to_plane(
     //https://stackoverflow.com/questions/15247347/collision-detection-between-a-boundingbox-and-a-sphere-in-libgdx
     let mut dmin = 0.0;
 
-    if (center.x < bmin.x) {
+    if center.x < bmin.x {
         dmin += (center.x - bmin.x).powf(2.0);
-    } else if (center.x > bmax.x) {
+    } else if center.x > bmax.x {
         dmin += (center.x - bmax.x).powf(2.0);
     }
 
-    if (center.y < bmin.y) {
+    if center.y < bmin.y {
         dmin += (center.y - bmin.y).powf(2.0);
-    } else if (center.y > bmax.y) {
+    } else if center.y > bmax.y {
         dmin += (center.y - bmax.y).powf(2.0);
     }
 
-    if (center.z < bmin.z) {
+    if center.z < bmin.z {
         dmin += (center.z - bmin.z).powf(2.0);
-    } else if (center.z > bmax.z) {
+    } else if center.z > bmax.z {
         dmin += (center.z - bmax.z).powf(2.0);
     }
 
@@ -72,11 +72,11 @@ pub fn detect_collide_sphere_to_plane(
 }
 
 pub fn calculate_impulse_force_between_spheres(sphere1: &Sphere, sphere2: &Sphere) -> Vector3 {
-    //finally found formula at
-    //https://www.gamasutra.com/view/feature/3168/physics_on_the_back_of_a_cocktail_.php?print=1
+    // finally found formula at
+    // https://www.gamasutra.com/view/feature/3168/physics_on_the_back_of_a_cocktail_.php?print=1
     let relative_velocity = sphere1.get_velocity() - sphere2.get_velocity();
 
-    //direction that sphere1 collides with sphere2
+    // direction that sphere1 collides with sphere2
     let dir_of_impact = Vector3::new(
         sphere2.get_position().x - sphere1.get_position().x,
         sphere2.get_position().y - sphere1.get_position().y,
@@ -90,8 +90,8 @@ pub fn calculate_impulse_force_between_spheres(sphere1: &Sphere, sphere2: &Spher
         * (numerator * (1.0 / ((1.0 / sphere1.get_mass()) + (1.0 / sphere2.get_mass()))));
 }
 
-pub fn calculate_impulse_force_sphere_plane(sphere: &Sphere, plane: &Plane) -> Vector3 {
-    //for now plane can't move
+pub fn calculate_impulse_force_sphere_plane(sphere: &Sphere, _plane: &Plane) -> Vector3 {
+    // for now plane can't move
     let vel = sphere.get_velocity();
 
     //for now sphere can only collide with plane going straight down

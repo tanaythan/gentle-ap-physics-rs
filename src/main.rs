@@ -6,18 +6,17 @@ use entity::plane::Plane;
 use entity::sphere::Sphere;
 use entity::Entity;
 use std::collections::HashMap;
-use util::time::duration_to_s;
 use util::vector3::Vector3;
 
 /* We can define sample constants here */
-const dt: f32 = 0.1;
-const max_steps: i32 = 20;
+const DT: f32 = 0.1;
+const MAX_STEPS: i32 = 20;
 
 fn main() {
-    //Initialize our sample entities
-    let state = Vector3::new(1.0, 2.0, 3.0);
-    let init_pos_1 = Vector3::new(2.0, 2.0, 2.0);
-    let init_pos_2 = Vector3::new(5.0, 2.0, 2.0);
+    // Initialize our sample entities
+    let state = Vector3::new(1.0, 0.0, 3.0);
+    let init_pos_1 = Vector3::new(2.0, 4.0, 2.0);
+    let init_pos_2 = Vector3::new(5.0, 4.0, 2.0);
     let v1 = Vector3::new(1.0, 0.0, 0.0);
     let v2 = Vector3::new(-1.0, 0.0, 0.0);
     let m = 1.0;
@@ -30,13 +29,13 @@ fn main() {
     all_entities.insert(String::from("Sphere1"), Entity::Sphere(sphere1));
     all_entities.insert(String::from("Sphere2"), Entity::Sphere(sphere2));
 
-    //Initialize sample world state
+    // Initialize sample world state
     let mut state = entity::worldstate::WorldState::new_with_map(all_entities);
 
     let mut i = 1;
-    while i <= max_steps {
+    while i <= MAX_STEPS {
         println!("-----------------STEP {:?}-----------------", i);
-        state.step(dt);
+        state.step(DT);
         i += 1;
     }
 }

@@ -41,12 +41,15 @@ impl WorldState {
             new_entities.insert(key.clone(), (*ent).update_state(self.accumulator, dt));
         }
 
-        for (key, ent) in &self.entities {
-            for (key2, ent2) in &self.entities {
-                if key == key2 {
+        let entities_copy = self.entities.clone ();
+        for (key, ent) in &mut self.entities {
+            for (key2, ent2) in &entities_copy {
+                if *key == *key2 {
                     continue;
                 }
-                ent.is_collided(ent2.clone()); // TODO: Something here
+                if (ent.is_collided(ent2.clone())) {
+                    ent.collide_with_entity (ent2.clone());
+                }
             }
         }
         self.entities = new_entities;

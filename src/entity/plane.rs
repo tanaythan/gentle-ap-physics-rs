@@ -40,7 +40,7 @@ impl Plane {
         );
     }
 
-    pub fn is_collided(&self, ent: Entity) -> bool {
+    pub fn is_collided(&self, ent: &Entity) -> bool {
         match ent {
             Entity::Plane(_) => false,
             Entity::Sphere(sphere) => math::detect_collide_sphere_to_plane(
@@ -65,16 +65,16 @@ impl entity::BaseEntity for Plane {
         return self.mass;
     }
 
-    fn get_next_position(&self, dt: f32) -> Vector3 {
+    fn get_next_position(&self, _dt: f32) -> Vector3 {
         self.position
     }
 
-    fn new_entity_with_state(&self, entity: Vector3) -> Entity {
+    fn new_entity_with_state(&self, _entity: Vector3) -> Entity {
         let plane = self.clone();
         Entity::Plane(plane)
     }
 
-    fn update_state(&self, t: f32, dt: f32) -> Entity {
+    fn update_state(&self, _t: f32, _dt: f32) -> Entity {
         Entity::Plane(self.clone())
     }
 
@@ -86,11 +86,11 @@ impl entity::BaseEntity for Plane {
         return Vector3::new(0.0, 0.0, 0.0);
     }
 
-    fn get_next_velocity(&self, dt: f32) -> Vector3 {
+    fn get_next_velocity(&self, _dt: f32) -> Vector3 {
         return Vector3::new(0.0, 0.0, 0.0);
     }
 
-    fn apply_force(&mut self, f: Vector3) {
+    fn apply_force(&mut self, _f: Vector3) {
         return;
     }
 

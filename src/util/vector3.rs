@@ -1,21 +1,11 @@
 use std::cmp;
 use std::ops;
 
-#[derive(Debug, Copy)]
+#[derive(Debug, Clone, Copy)]
 pub struct Vector3 {
     pub x: f32,
     pub y: f32,
     pub z: f32,
-}
-
-impl Clone for Vector3 {
-    fn clone(&self) -> Vector3 {
-        Vector3 {
-            x: self.x,
-            y: self.y,
-            z: self.z,
-        }
-    }
 }
 
 impl ops::Add<Vector3> for Vector3 {

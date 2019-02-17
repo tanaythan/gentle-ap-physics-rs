@@ -37,7 +37,7 @@ impl Sphere {
         };
     }
 
-    pub fn is_collided(&self, other: Entity) -> bool {
+    pub fn is_collided(&self, other: &Entity) -> bool {
         match other {
             Entity::Sphere(sphere) => math::detect_collide_sphere_to_sphere(
                 self.position,
@@ -58,7 +58,7 @@ impl Sphere {
         self.radius
     }
 
-    pub fn collide_with_sphere(&mut self, mut other: &mut Sphere) {
+    pub fn collide_with_sphere(&mut self, other: &mut Sphere) {
         let force = math::calculate_impulse_force_between_spheres(&self, &other);
         self.apply_force(force);
     
@@ -93,12 +93,11 @@ impl entity::BaseEntity for Sphere {
         return math::new_pos(self.position, self.get_next_velocity(dt), dt);
     }
 
-    fn new_entity_with_state(&self, entity: Vector3) -> Entity {
-        let sphere = self.clone();
-        Entity::Sphere(sphere)
+    fn new_entity_with_state(&self, _entity: Vector3) -> Entity {
+        Entity::Sphere(self.clone())
     }
 
-    fn update_state(&self, t: f32, dt: f32) -> Entity {
+    fn update_state(&self, _t: f32, dt: f32) -> Entity {
         let mut sphere = self.clone();
         sphere.velocity = sphere.get_next_velocity(dt);
         sphere.position = sphere.get_next_position(dt);
@@ -145,7 +144,7 @@ mod tests {
         let vec = Vector3::new(1.0, 1.0, 1.0);
         let sphere1 = Sphere::new("Sphere1".to_string(), vec, 1.0, 1.0, vec);
         let sphere2 = Sphere::new("Sphere2".to_string(), vec, 1.0, 1.0, vec);
-        assert_eq!(true, sphere1.is_collided(Entity::Sphere(sphere2)));
+        assert_eq!(true, sphere1.is_collided(&Entity::Sphere(sphere2)));
     }
 
     #[test]
@@ -153,7 +152,7 @@ mod tests {
         let vec = Vector3::new(1.0, 1.0, 1.0);
         let sphere1 = Sphere::new("Sphere1".to_string(), vec, 1.0, 1.0, vec);
         let plane1 = entity::plane::Plane::new("Plane1".to_string(), vec, 1.0, 1.0, 1.0);
-        assert_eq!(true, sphere1.is_collided(Entity::Plane(plane1)));
+        assert_eq!(true, sphere1.is_collided(&Entity::Plane(plane1)));
         let plane2 = entity::plane::Plane::new(
             "Plane2".to_string(),
             Vector3::new(4.0, 4.0, 4.0),
@@ -161,7 +160,7 @@ mod tests {
             1.0,
             1.0,
         );
-        assert_eq!(false, sphere1.is_collided(Entity::Plane(plane2)));
+        assert_eq!(false, sphere1.is_collided(&Entity::Plane(plane2)));
     }
 
     #[test]

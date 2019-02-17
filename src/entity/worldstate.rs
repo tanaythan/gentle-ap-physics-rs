@@ -45,7 +45,7 @@ impl WorldState {
                 if *key == *key2 {
                     continue;
                 }
-                if (ent.is_collided(ent2.clone())) {
+                if ent.is_collided(&ent2) {
                     ent.collide_with_entity(ent2.clone());
                 }
             }

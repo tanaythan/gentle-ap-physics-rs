@@ -94,7 +94,7 @@ impl entity::BaseEntity for Plane {
         return;
     }
 
-    fn collide_with_entity(&mut self, other: Entity) {
+    fn collide_with_entity(&mut self, _other: Entity) {
         return;
     }
 }

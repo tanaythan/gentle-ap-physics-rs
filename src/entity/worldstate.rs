@@ -38,7 +38,7 @@ impl WorldState {
         for (key, ent) in &self.entities {
             new_entities.insert(key.clone(), (*ent).update_state(self.accumulator, dt));
         }
-
+        self.entities = new_entities;
         let entities_copy = self.entities.clone();
         for (key, ent) in &mut self.entities {
             for (key2, ent2) in &entities_copy {
@@ -50,7 +50,6 @@ impl WorldState {
                 }
             }
         }
-        self.entities = new_entities;
     }
 
     pub fn print_state(&self) {

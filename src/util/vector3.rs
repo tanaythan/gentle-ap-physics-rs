@@ -1,5 +1,6 @@
 use std::cmp;
 use std::ops;
+use std::simd::f32x4;
 
 #[derive(Debug, Clone, Copy)]
 pub struct Vector3 {
@@ -12,7 +13,10 @@ impl ops::Add<Vector3> for Vector3 {
     type Output = Vector3;
 
     fn add(self, _rhs: Vector3) -> Vector3 {
-        return Vector3::new(self.x + _rhs.x, self.y + _rhs.y, self.z + _rhs.z);
+        let x = f32x4(self.x, self.y, self.z, 0.0);
+        let y = f32x4(_rhs.x, _rhs.y, _rhs.z, 0.0);
+        let z = x + y;
+        return Vector3::new(z.extract(0), z.extract(1), z.extract(2));
     }
 }
 

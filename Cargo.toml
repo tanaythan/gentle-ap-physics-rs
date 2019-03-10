@@ -4,3 +4,8 @@ version = "0.1.0"
 authors = ["Tanay Nathan <tnathan@berkeley.edu>"]
 
 [dependencies]
+criterion = "0.1.2"
+
+[[bench]]
+name = "vector3_benchmark"
+harness = false

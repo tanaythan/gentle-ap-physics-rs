@@ -3,13 +3,9 @@ use entity::plane::Plane;
 use entity::sphere::Sphere;
 use entity::BaseEntity;
 
-const COEFFICIENT_OF_FRICTION: f32 = 0.05;
 const ACC_GRAVITY: f32 = 9.8;
 const COEFFICIENT_OF_RESTITUTION: f32 = 0.5;
-
-pub fn friction(f: f32) -> f32 {
-    COEFFICIENT_OF_FRICTION * f
-}
+const COEFFICIENT_OF_ROLLING_FRICTION: f32= 0.5;
 
 pub fn gravity(m: f32) -> f32 {
     m * ACC_GRAVITY
@@ -103,14 +99,10 @@ pub fn calculate_impulse_force_sphere_plane(sphere: &Sphere, _plane: &Plane) -> 
     return dir_of_impact * (numerator * (1.0 / (1.0 / sphere.get_mass())));
 }
 
+
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    #[test]
-    fn it_calc_friction() {
-        assert_eq!(0.1, friction(2.0));
-    }
 
     #[test]
     fn it_calc_gravity() {

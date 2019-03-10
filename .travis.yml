@@ -3,5 +3,5 @@ rust:
     - nightly
     - stable
 script:
-    - cargo build --verbose --all
-    - cargo test --verbose --all
+    - cargo +nightly build --verbose --all
+    - cargo +nightly test --verbose --all

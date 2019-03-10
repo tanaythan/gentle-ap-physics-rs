@@ -2,10 +2,12 @@
 mod entity;
 mod util;
 
+extern crate rayon_hash;
+
 use entity::plane::Plane;
 use entity::sphere::Sphere;
 use entity::Entity;
-use std::collections::HashMap;
+use rayon_hash::hash_map::HashMap;
 use util::vector3::Vector3;
 
 /* We can define sample constants here */
@@ -15,8 +17,8 @@ const MAX_STEPS: i32 = 20;
 fn main() {
     // Initialize our sample entities
     let state = Vector3::new(1.0, 0.0, 3.0);
-    let init_pos_1 = Vector3::new(2.0, 4.0, 2.0);
-    let init_pos_2 = Vector3::new(5.0, 4.0, 2.0);
+    let init_pos_1 = Vector3::new(1.0, 3.0, 3.0);
+    let init_pos_2 = Vector3::new(1.0, 4.0, 3.0);
     let v1 = Vector3::new(1.0, 0.0, 0.0);
     let v2 = Vector3::new(-1.0, 0.0, 0.0);
     let m = 1.0;

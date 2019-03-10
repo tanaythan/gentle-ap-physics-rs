@@ -1,6 +1,7 @@
+extern crate rayon_hash;
+use self::rayon_hash::hash_map::HashMap;
 use entity::BaseEntity;
 use entity::Entity;
-use std::collections::HashMap;
 use std::ops::Add;
 use std::ops::Mul;
 use std::time::Instant;

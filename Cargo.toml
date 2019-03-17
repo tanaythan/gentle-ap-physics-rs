@@ -1,7 +1,13 @@
 [package]
 name = "gentle-ap-physics-rs"
 version = "0.1.0"
-authors = ["Tanay Nathan <tnathan@berkeley.edu>"]
+authors = [
+    "Tanay Nathan <tnathan@berkeley.edu>",
+    "Gabriel Gardner <ggm8@gabbbbbeeeee.io>",
+    "Krishnan Rajiyah <krajiyah@gmail.com>"
+]
 
 [dependencies]
 rayon-hash = "0.4.1"
+three = "0.4.0"
+ears = "0.5.1"

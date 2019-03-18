@@ -1,5 +1,4 @@
-extern crate rayon_hash;
-use self::rayon_hash::hash_map::HashMap;
+use rayon_hash::hash_map::HashMap;
 use entity::BaseEntity;
 use entity::Entity;
 use std::ops::Add;

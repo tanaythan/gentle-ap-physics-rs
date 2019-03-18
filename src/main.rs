@@ -2,7 +2,10 @@
 mod entity;
 mod util;
 
+#[macro_use]
 extern crate rayon_hash;
+#[macro_use]
+extern crate three;
 
 use entity::plane::Plane;
 use entity::sphere::Sphere;

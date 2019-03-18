@@ -11,3 +11,10 @@ authors = [
 rayon-hash = "0.4.1"
 three = "0.4.0"
 ears = "0.5.1"
+criterion = "0.1.2"
+
+[[bench]]
+name = "vector3_benchmark"
+harness = false
+
+

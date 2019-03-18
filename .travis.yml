@@ -1,6 +1,9 @@
 language: rust
 rust:
     - nightly
+before_install:
+    - sudo apt-get update
+    - sudo apt-get install -y libopenal-dev libsndfile1-dev libasound2-dev
 script:
     - cargo +nightly build --verbose --all
     - cargo +nightly test --verbose --all

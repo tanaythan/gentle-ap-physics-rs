@@ -3,12 +3,16 @@ mod entity;
 mod util;
 
 extern crate rayon_hash;
+extern crate three;
+extern crate ears;
 
+use std::thread;
 use entity::plane::Plane;
 use entity::sphere::Sphere;
 use entity::Entity;
 use rayon_hash::hash_map::HashMap;
 use util::vector3::Vector3;
+use ears::{Sound, AudioController};
 
 /* We can define sample constants here */
 const DT: f32 = 0.1;
@@ -39,5 +43,48 @@ fn main() {
         println!("-----------------STEP {:?}-----------------", i);
         state.step(DT);
         i += 1;
+    }
+
+    thread::spawn(|| {
+        play_sick_beats();
+    });
+    setup_window();
+}
+
+fn setup_window() {
+    let mut window = three::Window::new("Gentle AP Physics RS");
+    window.scene.background = three::Background::Color(0xC6F0FF);
+
+    // TODO: replace this sample code with our own `entities`
+    // BEGIN SAMPLE CODE
+    let vertices = vec![
+        [-0.5, -0.5, -0.5].into(),
+        [0.5, -0.5, -0.5].into(),
+        [0.0, 0.5, -0.5].into(),
+    ];
+    let geometry = three::Geometry::with_vertices(vertices);
+    let material = three::material::Basic {
+        color: 0xFFFF00,
+        map: None,
+    };
+    let mesh = window.factory.mesh(geometry, material);
+    window.scene.add(&mesh);
+
+    let center = [0.0, 0.0];
+    let yextent = 1.0;
+    let zrange = -1.0 .. 1.0;
+    let camera = window.factory.orthographic_camera(center, yextent, zrange);
+
+    while window.update() {
+        window.render(&camera);
+    }
+    // END SAMPLE CODE
+}
+
+fn play_sick_beats() {
+    loop {
+        let mut snd = Sound::new("./assets/sick_beats.wav").unwrap();
+        snd.play();
+        while snd.is_playing() {}
     }
 }

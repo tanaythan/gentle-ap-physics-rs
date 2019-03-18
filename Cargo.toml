@@ -5,3 +5,10 @@ authors = ["Tanay Nathan <tnathan@berkeley.edu>"]
 
 [dependencies]
 rayon-hash = "0.4.1"
+criterion = "0.1.2"
+
+[[bench]]
+name = "vector3_benchmark"
+harness = false
+
+

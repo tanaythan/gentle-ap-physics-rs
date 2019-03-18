@@ -1,7 +1,6 @@
 language: rust
 rust:
     - nightly
-    - stable
 script:
     - cargo +nightly build --verbose --all
     - cargo +nightly test --verbose --all

@@ -35,7 +35,7 @@ fn main() {
     all_entities.insert(String::from("Sphere1"), Entity::Sphere(sphere1));
     all_entities.insert(String::from("Sphere2"), Entity::Sphere(sphere2));
 
-    // // Initialize sample world state
+    // Initialize sample world state
     let mut state = entity::worldstate::WorldState::new_with_map(all_entities);
 
     let mut i = 1;
@@ -45,7 +45,7 @@ fn main() {
         i += 1;
     }
 
-    let handle = thread::spawn(|| {
+    thread::spawn(|| {
         play_sick_beats();
     });
     setup_window();

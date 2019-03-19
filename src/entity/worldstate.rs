@@ -1,4 +1,6 @@
-use rayon_hash::hash_map::HashMap;
+extern crate rayon_hash;
+
+use self::rayon_hash::hash_map::HashMap;
 use entity::BaseEntity;
 use entity::Entity;
 use std::ops::Add;
@@ -85,6 +87,10 @@ impl WorldState {
         let alpha = self.accumulator / dt;
         let lerp_state: WorldState = self.clone() * alpha + prev.clone() * (1.0 - alpha);
         lerp_state.print_state();
+    }
+    
+    pub fn all_entities(&self) -> HashMap<String, Entity> {
+        self.entities.clone()
     }
 }
 

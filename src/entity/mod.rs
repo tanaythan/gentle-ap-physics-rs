@@ -1,6 +1,7 @@
 pub mod plane;
 pub mod sphere;
 pub mod worldstate;
+extern crate three;
 use util::vector3::Vector3;
 
 pub trait BaseEntity {
@@ -30,9 +31,9 @@ impl Entity {
             Entity::Sphere(sphere) => sphere.is_collided(ent),
         }
     }
-}
 
-impl BaseEntity for Entity {
+    pub fn render(&self, window: &three::Window) {} 
+
     fn set_position(&mut self, vec: Vector3) {
         match self {
             Entity::Plane(plane) => plane.set_position(vec),

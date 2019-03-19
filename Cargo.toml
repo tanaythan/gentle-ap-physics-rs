@@ -1,8 +1,18 @@
 [package]
 name = "gentle-ap-physics-rs"
 version = "0.1.0"
-authors = ["Tanay Nathan <tanaynathan14@gmail.com>", "Gabriel Gardner", "Krishnan Rajiyah"]
+authors = [
+    "Tanay Nathan <tanaynathan14@gmail.com>",
+    "Gabriel Gardner <ggm8@gabbbbbeeeee.io>",
+    "Krishnan Rajiyah <krajiyah@gmail.com>"
+]
 
 [dependencies]
 rayon-hash = "0.4.1"
 three = "0.4.0"
+ears = "0.5.1"
+criterion = "0.1.2"
+
+[[bench]]
+name = "vector3_benchmark"
+harness = false

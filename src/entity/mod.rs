@@ -34,6 +34,10 @@ impl Entity {
 
     pub fn render(&self, window: &three::Window) {} 
 
+}
+
+impl BaseEntity for Entity {
+
     fn set_position(&mut self, vec: Vector3) {
         match self {
             Entity::Plane(plane) => plane.set_position(vec),

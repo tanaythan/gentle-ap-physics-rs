@@ -25,15 +25,18 @@ pub enum Entity {
 }
 
 impl Entity {
+    pub fn render(&self, window: &three::Window) {} 
+
     pub fn is_collided(&self, ent: &Entity) -> bool {
         match self {
             Entity::Plane(plane) => plane.is_collided(ent),
             Entity::Sphere(sphere) => sphere.is_collided(ent),
         }
     }
+}
 
-    pub fn render(&self, window: &three::Window) {} 
-
+impl BaseEntity for  Entity {
+    
     fn set_position(&mut self, vec: Vector3) {
         match self {
             Entity::Plane(plane) => plane.set_position(vec),

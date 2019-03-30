@@ -79,7 +79,7 @@ impl Sphere {
 
     pub fn render(&self, window: &mut three::Window) {
         let msphere = {
-            let geometry = three::Geometry::uv_sphere(self.radius, 5, 5);
+            let geometry = three::Geometry::uv_sphere(self.radius, 1000, 1000);
             let material = three::material::Wireframe { color: 0xFF0000 };
             window.factory.mesh(geometry, material)
         };

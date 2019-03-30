@@ -1,11 +1,10 @@
 extern crate three;
-use std::collections::HashMap;
+extern crate rayon_hash;
 use entity::Entity;
 
 pub struct Renderer {
     window: three::Window,
     camera: three::camera::Camera,
-    entities: HashMap<String, Entity>,
 }
 
 impl Renderer {
@@ -21,14 +20,13 @@ impl Renderer {
         Renderer {
             window: window,
             camera: camera,
-            entities: HashMap::<String, Entity>::new(),
         }
     }
 
-    pub fn render(&mut self) -> bool {
+    pub fn render(&mut self, &entities: rayon_hash::hash_map::HashMap<String, Entity>) -> bool {
         let is_updated = self.window.update();
         if is_updated {
-            for (key, ent) in &self.entities {
+            for (key, ent) in entities {
                 ent.render(&self.window);
             }
             self.window.render(&self.camera);

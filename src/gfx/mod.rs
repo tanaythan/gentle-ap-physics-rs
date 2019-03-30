@@ -25,8 +25,8 @@ impl Renderer {
         window.scene.background = three::Background::Color(0xC6F0FF);
 
         let center = [0.0, 0.0];
-        let yextent = 1.0;
-        let zrange = -1.0 .. 1.0;
+        let yextent = 20.0;
+        let zrange = -20.0 .. 20.0;
         let camera = window.factory.orthographic_camera(center, yextent, zrange);
 
         Renderer {

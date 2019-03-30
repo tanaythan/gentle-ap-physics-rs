@@ -55,7 +55,7 @@ impl Plane {
 
     pub fn render(&self, window: &mut three::Window) {
         let msphere = {
-            let geometry = three::Geometry::cuboid(self.width, self.length, 2.0);
+            let geometry = three::Geometry::plane(self.width, self.length);
             let material = three::material::Wireframe { color: 0x0000FF };
             window.factory.mesh(geometry, material)
         };

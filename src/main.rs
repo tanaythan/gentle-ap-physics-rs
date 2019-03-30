@@ -7,7 +7,7 @@ extern crate rayon_hash;
 extern crate three;
 extern crate ears;
 
-use std::thread;
+use std::{thread, time};
 use entity::plane::Plane;
 use entity::sphere::Sphere;
 use entity::Entity;
@@ -53,6 +53,7 @@ fn main() {
         state.step(DT);
         is_open = renderer.render();
         i += 1;
+        thread::sleep(time::Duration::from_millis(1000));
     }
 
 }

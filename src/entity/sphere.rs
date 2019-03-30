@@ -84,6 +84,7 @@ impl Sphere {
             window.factory.mesh(geometry, material)
         };
         msphere.set_position ([self.position.x, self.position.y, self.position.z]);
+        window.scene.add(&msphere)
     }
 }
 

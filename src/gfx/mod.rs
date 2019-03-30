@@ -2,21 +2,10 @@ extern crate three;
 use std::collections::HashMap;
 use entity::Entity;
 
-// Add renderable types here
-enum Renderable {
-    Fake,
-}
-
-impl Renderable {
-    pub fn new() -> Renderable {
-        Renderable::Fake
-    }
-}
-
 pub struct Renderer {
     window: three::Window,
     camera: three::camera::Camera,
-    renderables: HashMap<String, Renderable>,
+    entities: HashMap<String, Entity>,
 }
 
 impl Renderer {
@@ -32,22 +21,16 @@ impl Renderer {
         Renderer {
             window: window,
             camera: camera,
-            renderables: HashMap::<String, Renderable>::new(),
-        }
-    }
-
-    pub fn update_ent(&mut self, entities: HashMap<String, Entity>) {
-        for (key, ent) in entities {
-            if !self.renderables.contains_key(&key) {
-                self.renderables.insert(key.clone(), Renderable::new());
-            }
-            // Update entity position here
+            entities: HashMap::<String, Entity>::new(),
         }
     }
 
     pub fn render(&mut self) -> bool {
         let is_updated = self.window.update();
         if is_updated {
+            for (key, ent) in self.entities {
+                ent.render(&self.window);
+            }
             self.window.render(&self.camera);
         }
         is_updated

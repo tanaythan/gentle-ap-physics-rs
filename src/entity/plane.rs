@@ -54,12 +54,13 @@ impl Plane {
     }
 
     pub fn render(&self, window: &mut three::Window) {
-        let msphere = {
+        let mplane = {
             let geometry = three::Geometry::plane(self.width, self.length);
             let material = three::material::Wireframe { color: 0x0000FF };
             window.factory.mesh(geometry, material)
         };
-        msphere.set_position ([self.position.x, self.position.y, self.position.z]);
+        mplane.set_position ([self.position.x, self.position.y, self.position.z]);
+        window.scene.add(&mplane);
     }
 }
 

@@ -3,6 +3,7 @@ use entity::BaseEntity;
 use entity::Entity;
 use util::math;
 use util::vector3::Vector3;
+use entity::three::Object;
 
 #[derive(Debug, Clone)]
 pub struct Plane {
@@ -96,6 +97,15 @@ impl entity::BaseEntity for Plane {
 
     fn collide_with_entity(&mut self, _other: Entity) {
         return;
+    }
+
+    pub fn render(&self, window: &mut three::Window) {
+        let msphere = {
+            let geometry = three::Geometry::cuboid(self.width, self.length, 2.0);
+            let material = three::material::Wireframe { color: 0x0000FF };
+            window.factory.mesh(geometry, material)
+        };
+        msphere.set_position ([self.position.x, self.position.y, self.position.z]);
     }
 }
 

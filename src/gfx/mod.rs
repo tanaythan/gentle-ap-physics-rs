@@ -28,7 +28,7 @@ impl Renderer {
     pub fn render(&mut self) -> bool {
         let is_updated = self.window.update();
         if is_updated {
-            for (key, ent) in self.entities {
+            for (key, ent) in &self.entities {
                 ent.render(&self.window);
             }
             self.window.render(&self.camera);

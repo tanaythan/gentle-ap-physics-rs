@@ -63,7 +63,7 @@ fn main() {
         state.step(DT);
         is_open = render(&mut window, &camera, &state.all_entities());
         i += 1;
-        thread::sleep(time::Duration::from_millis(500));
+        thread::sleep(time::Duration::from_millis(50));
     }
 
 }

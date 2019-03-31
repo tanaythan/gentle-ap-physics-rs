@@ -4,6 +4,7 @@ use entity::Entity;
 use util::math;
 use util::vector3::Vector3;
 use entity::three::Object;
+use std::ptr;
 
 #[derive(Debug, Clone)]
 pub struct Plane {
@@ -12,6 +13,7 @@ pub struct Plane {
     mass: f32,
     width: f32,
     length: f32,
+    mesh: three::Mesh
 }
 
 impl Plane {
@@ -22,7 +24,18 @@ impl Plane {
             mass: mass,
             width: width,
             length: length,
+            mesh: ptr::null(),
         };
+    }
+
+    pub fn set_graphics(&self, window: &mut three::Window) {
+        let mesh = {
+            let geometry = three::Geometry::plane(self.width, self.length);
+            let material = three::material::Wireframe { color: 0x0000FF };
+            window.factory.mesh(geometry, material)
+        };
+        self.mesh = mesh;
+        window.scene.add(&mesh);
     }
 
     pub fn get_min_point(&self) -> Vector3 {
@@ -53,14 +66,11 @@ impl Plane {
         }
     }
 
-    pub fn render(&self, window: &mut three::Window) {
-        let mplane = {
-            let geometry = three::Geometry::plane(self.width, self.length);
-            let material = three::material::Wireframe { color: 0x0000FF };
-            window.factory.mesh(geometry, material)
-        };
-        mplane.set_position ([self.position.x, self.position.y, self.position.z]);
-        window.scene.add(&mplane);
+    pub fn render(&self) {
+        if self.mesh.is_null() {
+            return
+        }
+        self.mesh.set_position ([self.position.x, self.position.y, self.position.z]);
     }
 }
 

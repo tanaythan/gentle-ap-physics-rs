@@ -46,6 +46,8 @@ fn main() {
     // Initialize sample world state
     let mut state = entity::worldstate::WorldState::new_with_map(all_entities);
 
+    set_graphics(&mut window, state.all_entities());
+
     let mut i = 1;
     let mut is_open = true;
 
@@ -68,6 +70,12 @@ fn play_sick_beats() {
         let mut snd = Sound::new("./assets/sick_beats.wav").unwrap();
         snd.play();
         while snd.is_playing() {}
+    }
+}
+
+fn set_graphics(window: &mut three::Window, entities: &rayon_hash::hash_map::HashMap<String, Entity>) {
+    for (_key, ent) in entities {
+        ent.set_graphics(window);
     }
 }
 

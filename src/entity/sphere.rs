@@ -42,7 +42,7 @@ impl Sphere {
         };
     }
 
-    pub fn set_graphics(&self, window: &mut three::Window) -> Sphere {
+    pub fn set_graphics(&self, window: &mut three::Window) {
         let mesh = {
             let geometry = three::Geometry::uv_sphere(self.radius, 1000, 1000);
             let material = three::material::Wireframe { color: 0xFF0000 };

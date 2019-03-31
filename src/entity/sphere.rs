@@ -4,6 +4,7 @@ use entity::BaseEntity;
 use entity::Entity;
 use util::math;
 use util::vector3::Vector3;
+use entity::three::Object;
 
 fn get_g_force(mass: f32) -> Vector3 {
     return Vector3::new(0.0, -1.0 * math::gravity(mass), 0.0);
@@ -17,9 +18,11 @@ pub struct Sphere {
     radius: f32,
     velocity: Vector3,
     forces: Vec<Vector3>,
+    mesh: Option<three::Mesh>,
 }
 
 impl Sphere {
+
     pub fn new(
         name: String,
         position: Vector3,
@@ -34,7 +37,18 @@ impl Sphere {
             radius: radius,
             velocity: velocity,
             forces: [get_g_force(mass)].to_vec(),
+            mesh: None,
         };
+    }
+
+    pub fn set_graphics(&mut self, window: &mut three::Window) {
+        let mesh = {
+            let geometry = three::Geometry::uv_sphere(self.radius, 1000, 1000);
+            let material = three::material::Wireframe { color: 0xFF0000 };
+            window.factory.mesh(geometry, material)
+        };
+        window.scene.add(&mesh);
+        self.mesh = Some(mesh);
     }
 
     pub fn is_collided(&self, other: &Entity) -> bool {
@@ -73,6 +87,13 @@ impl Sphere {
 
     pub fn get_velocity(&self) -> Vector3 {
         self.velocity
+    }
+
+    pub fn render(&self) {
+        match self.mesh {
+            Some(ref mesh) => mesh.set_position([self.position.x, self.position.y, self.position.z]),
+            None => panic!("Can't render w/o graphics!"),
+        }
     }
 }
 

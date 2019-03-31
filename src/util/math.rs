@@ -5,7 +5,6 @@ use entity::BaseEntity;
 
 const ACC_GRAVITY: f32 = 9.8;
 const COEFFICIENT_OF_RESTITUTION: f32 = 0.5;
-const COEFFICIENT_OF_ROLLING_FRICTION: f32= 0.5;
 
 pub fn gravity(m: f32) -> f32 {
     m * ACC_GRAVITY

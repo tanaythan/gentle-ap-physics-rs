@@ -1,6 +1,7 @@
 pub mod plane;
 pub mod sphere;
 pub mod worldstate;
+extern crate three;
 use util::vector3::Vector3;
 
 pub trait BaseEntity {
@@ -24,6 +25,20 @@ pub enum Entity {
 }
 
 impl Entity {
+    pub fn render(&self) {
+        match self {
+            Entity::Plane(plane) => plane.render(),
+            Entity::Sphere(sphere) => sphere.render(),
+        }
+    }
+
+    pub fn set_graphics(&mut self, window: &mut three::Window) {
+        match self {
+            Entity::Plane(plane) => plane.set_graphics(window),
+            Entity::Sphere(sphere) => sphere.set_graphics(window),
+        }
+    }
+
     pub fn is_collided(&self, ent: &Entity) -> bool {
         match self {
             Entity::Plane(plane) => plane.is_collided(ent),
@@ -33,6 +48,7 @@ impl Entity {
 }
 
 impl BaseEntity for Entity {
+    
     fn set_position(&mut self, vec: Vector3) {
         match self {
             Entity::Plane(plane) => plane.set_position(vec),

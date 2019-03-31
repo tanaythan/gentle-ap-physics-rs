@@ -3,6 +3,7 @@ use entity::BaseEntity;
 use entity::Entity;
 use util::math;
 use util::vector3::Vector3;
+use entity::three::Object;
 
 #[derive(Debug, Clone)]
 pub struct Plane {
@@ -11,6 +12,7 @@ pub struct Plane {
     mass: f32,
     width: f32,
     length: f32,
+    mesh: Option<three::Mesh>
 }
 
 impl Plane {
@@ -21,7 +23,18 @@ impl Plane {
             mass: mass,
             width: width,
             length: length,
+            mesh: None,
         };
+    }
+
+    pub fn set_graphics(&mut self, window: &mut three::Window) {
+        let mesh = {
+            let geometry = three::Geometry::plane(self.width, self.length);
+            let material = three::material::Wireframe { color: 0x0000FF };
+            window.factory.mesh(geometry, material)
+        };
+        window.scene.add(&mesh);
+        self.mesh = Some(mesh);
     }
 
     pub fn get_min_point(&self) -> Vector3 {
@@ -51,7 +64,15 @@ impl Plane {
             ),
         }
     }
+
+    pub fn render(&self) {
+        match self.mesh {
+            Some(ref mesh) => mesh.set_position([self.position.x, self.position.y, self.position.z]),
+            None => panic!("Can't render w/o graphics!"),
+        }
+    }
 }
+
 impl entity::BaseEntity for Plane {
     fn set_position(&mut self, position: Vector3) {
         self.position = position.clone();

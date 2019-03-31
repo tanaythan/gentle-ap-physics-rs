@@ -2,7 +2,7 @@
 name = "gentle-ap-physics-rs"
 version = "0.1.0"
 authors = [
-    "Tanay Nathan <tnathan@berkeley.edu>",
+    "Tanay Nathan <tanaynathan14@gmail.com>",
     "Gabriel Gardner <ggm8@gabbbbbeeeee.io>",
     "Krishnan Rajiyah <krajiyah@gmail.com>"
 ]
@@ -16,5 +16,3 @@ criterion = "0.1.2"
 [[bench]]
 name = "vector3_benchmark"
 harness = false
-
-

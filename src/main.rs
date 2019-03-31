@@ -1,7 +1,6 @@
 #![allow(dead_code)]
 mod entity;
 mod util;
-mod gfx;
 
 extern crate rayon_hash;
 extern crate three;
@@ -11,7 +10,6 @@ use std::{thread, time};
 use entity::plane::Plane;
 use entity::sphere::Sphere;
 use entity::Entity;
-use gfx::Renderer;
 use rayon_hash::hash_map::HashMap;
 use util::vector3::Vector3;
 use ears::{Sound, AudioController};
@@ -21,6 +19,14 @@ const DT: f32 = 0.1;
 const MAX_STEPS: i32 = 10020;
 
 fn main() {
+    // Window
+    let mut window = three::Window::new("Gentle AP Physics RS");
+        window.scene.background = three::Background::Color(0xC6F0FF);
+    let center = [0.0, 0.0];
+    let yextent = 20.0;
+    let zrange = -20.0 .. 20.0;
+    let camera = window.factory.orthographic_camera(center, yextent, zrange);
+
     // Initialize our sample entities
     let state = Vector3::new(1.0, 0.0, 3.0);
     let init_pos_1 = Vector3::new(1.0, 3.0, 3.0);
@@ -36,7 +42,6 @@ fn main() {
     all_entities.insert(String::from("Plane1"), Entity::Plane(plane));
     all_entities.insert(String::from("Sphere1"), Entity::Sphere(sphere1));
     all_entities.insert(String::from("Sphere2"), Entity::Sphere(sphere2));
-    let mut renderer = Renderer::new();
 
     // Initialize sample world state
     let mut state = entity::worldstate::WorldState::new_with_map(all_entities);
@@ -51,14 +56,12 @@ fn main() {
     while i <= MAX_STEPS && is_open {
         println!("-----------------STEP {:?}-----------------", i);
         state.step(DT);
-        is_open = renderer.render(&state.all_entities());
+        is_open = render(&mut window, &camera, &state.all_entities());
         i += 1;
-        thread::sleep(time::Duration::from_millis(1000));
+        thread::sleep(time::Duration::from_millis(500));
     }
 
 }
-
-
 
 fn play_sick_beats() {
     loop {
@@ -66,4 +69,15 @@ fn play_sick_beats() {
         snd.play();
         while snd.is_playing() {}
     }
+}
+
+fn render(window: &mut three::Window, camera: &three::camera::Camera, entities: &rayon_hash::hash_map::HashMap<String, Entity>) -> bool {
+    let is_updated = window.update();
+    if is_updated {
+        for (_key, ent) in entities {
+            ent.render(window);
+        }
+        window.render(camera);
+    }
+    is_updated
 }

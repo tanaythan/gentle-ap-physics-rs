@@ -25,7 +25,12 @@ pub enum Entity {
 }
 
 impl Entity {
-    pub fn render(&self, _window: &three::Window) {} 
+    pub fn render(&self, window: &mut three::Window) {
+        match self {
+            Entity::Plane(plane) => plane.render(window),
+            Entity::Sphere(sphere) => sphere.render(window),
+        }
+    } 
 
     pub fn is_collided(&self, ent: &Entity) -> bool {
         match self {

@@ -47,7 +47,7 @@ impl Entity {
     }
 }
 
-impl BaseEntity for  Entity {
+impl BaseEntity for Entity {
     
     fn set_position(&mut self, vec: Vector3) {
         match self {

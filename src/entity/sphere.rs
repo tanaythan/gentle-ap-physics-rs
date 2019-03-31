@@ -92,7 +92,7 @@ impl Sphere {
     pub fn render(&self) {
         match self.mesh {
             Some(ref mesh) => mesh.set_position([self.position.x, self.position.y, self.position.z]),
-            None => println!("Can't render w/o graphics!"),
+            None => panic!("Can't render w/o graphics!"),
         }
     }
 }

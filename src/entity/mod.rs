@@ -32,7 +32,7 @@ impl Entity {
         }
     }
 
-    pub fn set_graphics(&self, window: &mut three::Window) {
+    pub fn set_graphics(&mut self, window: &mut three::Window) {
         match self {
             Entity::Plane(plane) => plane.set_graphics(window),
             Entity::Sphere(sphere) => sphere.set_graphics(window),

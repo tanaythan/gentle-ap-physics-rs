@@ -5,7 +5,6 @@ use entity::Entity;
 use util::math;
 use util::vector3::Vector3;
 use entity::three::Object;
-use std::ptr;
 
 fn get_g_force(mass: f32) -> Vector3 {
     return Vector3::new(0.0, -1.0 * math::gravity(mass), 0.0);
@@ -19,7 +18,7 @@ pub struct Sphere {
     radius: f32,
     velocity: Vector3,
     forces: Vec<Vector3>,
-    mesh: three::Mesh,
+    mesh: Option<three::Mesh>,
 }
 
 impl Sphere {
@@ -38,18 +37,18 @@ impl Sphere {
             radius: radius,
             velocity: velocity,
             forces: [get_g_force(mass)].to_vec(),
-            mesh: ptr::null(),
+            mesh: None,
         };
     }
 
-    pub fn set_graphics(&self, window: &mut three::Window) {
+    pub fn set_graphics(&mut self, window: &mut three::Window) {
         let mesh = {
             let geometry = three::Geometry::uv_sphere(self.radius, 1000, 1000);
             let material = three::material::Wireframe { color: 0xFF0000 };
             window.factory.mesh(geometry, material)
         };
-        self.mesh = mesh;
         window.scene.add(&mesh);
+        self.mesh = Some(mesh);
     }
 
     pub fn is_collided(&self, other: &Entity) -> bool {
@@ -91,10 +90,10 @@ impl Sphere {
     }
 
     pub fn render(&self) {
-        if self.mesh.is_null() {
-            return
+        match self.mesh {
+            Some(ref mesh) => mesh.set_position([self.position.x, self.position.y, self.position.z]),
+            None => println!("Can't render w/o graphics!"),
         }
-        self.mesh.set_position ([self.position.x, self.position.y, self.position.z]);
     }
 }
 

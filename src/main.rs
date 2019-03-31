@@ -46,7 +46,7 @@ fn main() {
     // Initialize sample world state
     let mut state = entity::worldstate::WorldState::new_with_map(all_entities);
 
-    set_graphics(&mut window, state.all_entities());
+    set_graphics(&mut window, &state.all_entities());
 
     let mut i = 1;
     let mut is_open = true;
@@ -60,7 +60,8 @@ fn main() {
         state.step(DT);
         is_open = render(&mut window, &camera, &state.all_entities());
         i += 1;
-        k
+        thread::sleep(time::Duration::from_millis(500));
+    }
 
 }
 
@@ -82,7 +83,7 @@ fn render(window: &mut three::Window, camera: &three::camera::Camera, entities: 
     let is_updated = window.update();
     if is_updated {
         for (_key, ent) in entities {
-            ent.render(window);
+            ent.render();
         }
         window.render(camera);
     }

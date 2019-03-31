@@ -36,7 +36,7 @@ fn main() {
     all_entities.insert(String::from("Plane1"), Entity::Plane(plane));
     all_entities.insert(String::from("Sphere1"), Entity::Sphere(sphere1));
     all_entities.insert(String::from("Sphere2"), Entity::Sphere(sphere2));
-    let mut renderer = Renderer::new(all_entities);
+    let mut renderer = Renderer::new();
 
     // Initialize sample world state
     let mut state = entity::worldstate::WorldState::new_with_map(all_entities);
@@ -51,7 +51,7 @@ fn main() {
     while i <= MAX_STEPS && is_open {
         println!("-----------------STEP {:?}-----------------", i);
         state.step(DT);
-        is_open = renderer.render();
+        is_open = renderer.render(&state.all_entities());
         i += 1;
         thread::sleep(time::Duration::from_millis(1000));
     }

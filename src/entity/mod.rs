@@ -25,7 +25,7 @@ pub enum Entity {
 }
 
 impl Entity {
-    pub fn render(&self, window: &three::Window) {} 
+    pub fn render(&self, _window: &three::Window) {} 
 
     pub fn is_collided(&self, ent: &Entity) -> bool {
         match self {

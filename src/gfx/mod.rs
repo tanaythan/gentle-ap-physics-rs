@@ -23,10 +23,10 @@ impl Renderer {
         }
     }
 
-    pub fn render(&mut self, &entities: rayon_hash::hash_map::HashMap<String, Entity>) -> bool {
+    pub fn render(&mut self, entities: &rayon_hash::hash_map::HashMap<String, Entity>) -> bool {
         let is_updated = self.window.update();
         if is_updated {
-            for (key, ent) in entities {
+            for (_key, ent) in entities {
                 ent.render(&self.window);
             }
             self.window.render(&self.camera);

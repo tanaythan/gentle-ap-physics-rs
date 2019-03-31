@@ -35,9 +35,14 @@ fn main() {
     let v2 = Vector3::new(-1.0, 0.0, 0.0);
     let m = 1.0;
     let r = 1.0;
-    let plane = Plane::new(String::from("Plane1"), state.clone(), 1.0, 2.0, 4.0);
-    let sphere1 = Sphere::new(String::from("Sphere1"), init_pos_1, m, r, v1);
-    let sphere2 = Sphere::new(String::from("Sphere2"), init_pos_2, m, r, v2);
+
+    let mut plane = Plane::new(String::from("Plane1"), state.clone(), 1.0, 2.0, 4.0);
+    let mut sphere1 = Sphere::new(String::from("Sphere1"), init_pos_1, m, r, v1);
+    let mut sphere2 = Sphere::new(String::from("Sphere2"), init_pos_2, m, r, v2);
+    plane.set_graphics(&mut window);
+    sphere1.set_graphics(&mut window);
+    sphere2.set_graphics(&mut window);
+
     let mut all_entities: HashMap<String, Entity> = HashMap::new();
     all_entities.insert(String::from("Plane1"), Entity::Plane(plane));
     all_entities.insert(String::from("Sphere1"), Entity::Sphere(sphere1));
@@ -45,8 +50,6 @@ fn main() {
 
     // Initialize sample world state
     let mut state = entity::worldstate::WorldState::new_with_map(all_entities);
-
-    set_graphics(&mut window, &state.all_entities());
 
     let mut i = 1;
     let mut is_open = true;
@@ -70,12 +73,6 @@ fn play_sick_beats() {
         let mut snd = Sound::new("./assets/sick_beats.wav").unwrap();
         snd.play();
         while snd.is_playing() {}
-    }
-}
-
-fn set_graphics(window: &mut three::Window, entities: &rayon_hash::hash_map::HashMap<String, Entity>) {
-    for (_key, ent) in entities {
-        ent.set_graphics(window);
     }
 }
 

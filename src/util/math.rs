@@ -3,7 +3,7 @@ use entity::plane::Plane;
 use entity::sphere::Sphere;
 use entity::BaseEntity;
 
-const ACC_GRAVITY: f32 = 9.8;
+pub const ACC_GRAVITY: f32 = 1.0;
 const COEFFICIENT_OF_RESTITUTION: f32 = 0.5;
 
 pub fn gravity(m: f32) -> f32 {
@@ -102,11 +102,6 @@ pub fn calculate_impulse_force_sphere_plane(sphere: &Sphere, _plane: &Plane) -> 
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    #[test]
-    fn it_calc_gravity() {
-        assert_eq!(19.6, gravity(2.0));
-    }
 
     #[test]
     fn it_calc_velocity() {

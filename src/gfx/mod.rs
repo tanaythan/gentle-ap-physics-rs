@@ -2,6 +2,7 @@ extern crate three;
 extern crate rayon_hash;
 use self::rayon_hash::hash_map::HashMap;
 use entity::Entity;
+use self::three::Object;
 
 pub struct Renderer {
     window: three::Window,
@@ -11,13 +12,14 @@ pub struct Renderer {
 impl Renderer {
     pub fn new() -> Renderer {
         let mut window = three::Window::new("Gentle AP Physics RS");
-        window.scene.background = three::Background::Color(0xC6F0FF);
+        window.scene.background = three::Background::Color(0x000000);
 
-        let center = [0.0, 0.0];
-        let yextent = 20.0;
-        let zrange = -20.0 .. 20.0;
-        let camera = window.factory.orthographic_camera(center, yextent, zrange);
-
+        let yrange = 100.0;
+        let zdepth = 1.0 .. 20.0;
+        let camera = window.factory.perspective_camera(yrange, zdepth);
+        //camera.set_position([0.0, -8.0, 20.0]);
+        //camera.set_orientation([0.707, 0.0, 0.707, 0.0]);
+        camera.look_at([0.0, 0.0, 20.0], [0.0, 1.5, 0.0], None);
         Renderer {
             window: window,
             camera: camera,

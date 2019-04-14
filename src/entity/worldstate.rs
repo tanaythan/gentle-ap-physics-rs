@@ -132,6 +132,7 @@ mod tests {
     use super::*;
     use entity::sphere::Sphere;
     use util::vector3::Vector3;
+    use util::math::ACC_GRAVITY;
 
     #[test]
     fn it_update_entities() {
@@ -149,7 +150,7 @@ mod tests {
 
         let sphere1_box = state.get(String::from("Sphere1"));
 
-        let expected = Vector3::new(3.0, -16.6, 3.0);
+        let expected = Vector3::new(3.0, (v1.y + init_pos_1.y) - ACC_GRAVITY * 2.0, 3.0);
         assert_eq!(&expected, sphere1_box.get_position());
     }
 }

@@ -6,6 +6,7 @@ use gentle_ap_physics_rs::entity::worldstate::WorldState;
 use gentle_ap_physics_rs::entity::BaseEntity;
 use gentle_ap_physics_rs::entity::Entity;
 use gentle_ap_physics_rs::util::vector3::Vector3;
+use gentle_ap_physics_rs::util::math::ACC_GRAVITY;
 
 #[test]
 fn test_simple_sphere_collision() {
@@ -49,8 +50,8 @@ fn test_simple_sphere_collision() {
     sphere2_box = state.get(String::from("Sphere2"));
 
     assert_eq!(false, sphere1_box.is_collided(&sphere2_box));
-    assert_eq!(Vector3::new(-1.5, -9.8, 0.0), sphere1_box.get_net_acceleration());
-    assert_eq!(Vector3::new(1.5, -9.8, 0.0), sphere2_box.get_net_acceleration());
+    assert_eq!(Vector3::new(-1.5, -ACC_GRAVITY, 0.0), sphere1_box.get_net_acceleration());
+    assert_eq!(Vector3::new(1.5, -ACC_GRAVITY, 0.0), sphere2_box.get_net_acceleration());
 }
 
 #[test]
@@ -110,7 +111,7 @@ fn test_complex_sphere_collision() {
     let sphere2_box = state.get(String::from("Sphere2"));
 
     assert_eq!(false, sphere1_box.is_collided(&sphere2_box));
-    assert_eq!(Vector3::new(0.0, -9.8, 0.0), sphere1_box.get_net_acceleration());
+    assert_eq!(Vector3::new(0.0, -ACC_GRAVITY, 0.0), sphere1_box.get_net_acceleration());
     assert_eq!(sphere1_box.get_net_acceleration(), sphere2_box.get_net_acceleration());
 }
 
@@ -161,6 +162,6 @@ fn test_collision_with_additional_forces() {
     let sphere2_box = state.get(String::from("Sphere2"));
 
     assert_eq!(false, sphere1_box.is_collided(&sphere2_box));
-    assert_eq!(Vector3::new(-0.5, -9.8, -1.0), sphere1_box.get_net_acceleration());
-    assert_eq!(Vector3::new(2.5, -9.8, -1.0), sphere2_box.get_net_acceleration());
+    assert_eq!(Vector3::new(-0.5, -ACC_GRAVITY, -1.0), sphere1_box.get_net_acceleration());
+    assert_eq!(Vector3::new(2.5, -ACC_GRAVITY, -1.0), sphere2_box.get_net_acceleration());
 }

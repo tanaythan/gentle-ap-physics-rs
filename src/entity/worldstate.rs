@@ -6,7 +6,6 @@ use entity::Entity;
 use std::ops::Add;
 use std::ops::Mul;
 use std::time::Instant;
-use util::math::ACC_GRAVITY;
 
 #[derive(Clone)]
 pub struct WorldState {
@@ -133,6 +132,7 @@ mod tests {
     use super::*;
     use entity::sphere::Sphere;
     use util::vector3::Vector3;
+    use util::math::ACC_GRAVITY;
 
     #[test]
     fn it_update_entities() {

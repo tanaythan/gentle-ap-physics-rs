@@ -6,6 +6,7 @@ use gentle_ap_physics_rs::entity::worldstate::WorldState;
 use gentle_ap_physics_rs::entity::BaseEntity;
 use gentle_ap_physics_rs::entity::Entity;
 use gentle_ap_physics_rs::util::vector3::Vector3;
+use gentle_ap_physics_rs::util::math::ACC_GRAVITY;
 
 #[test]
 fn test_simple_sphere_collision() {

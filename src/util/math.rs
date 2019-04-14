@@ -104,11 +104,6 @@ mod tests {
     use super::*;
 
     #[test]
-    fn it_calc_gravity() {
-        assert_eq!(2.0, gravity(2.0));
-    }
-
-    #[test]
     fn it_calc_velocity() {
         let src = Vector3::new(1.0, 1.0, 1.0);
         let dst = Vector3::new(2.0, 2.0, 2.0);

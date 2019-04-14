@@ -105,7 +105,7 @@ mod tests {
 
     #[test]
     fn it_calc_gravity() {
-        assert_eq!(19.6, gravity(2.0));
+        assert_eq!(2.0, gravity(2.0));
     }
 
     #[test]

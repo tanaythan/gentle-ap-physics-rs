@@ -3,7 +3,7 @@ use entity::plane::Plane;
 use entity::sphere::Sphere;
 use entity::BaseEntity;
 
-const ACC_GRAVITY: f32 = 1.0;
+pub const ACC_GRAVITY: f32 = 1.0;
 const COEFFICIENT_OF_RESTITUTION: f32 = 0.5;
 
 pub fn gravity(m: f32) -> f32 {

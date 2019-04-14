@@ -50,8 +50,8 @@ fn test_simple_sphere_collision() {
     sphere2_box = state.get(String::from("Sphere2"));
 
     assert_eq!(false, sphere1_box.is_collided(&sphere2_box));
-    assert_eq!(Vector3::new(-1.5, -9.8, 0.0), sphere1_box.get_net_acceleration());
-    assert_eq!(Vector3::new(1.5, -9.8, 0.0), sphere2_box.get_net_acceleration());
+    assert_eq!(Vector3::new(-1.5, -ACC_GRAVITY, 0.0), sphere1_box.get_net_acceleration());
+    assert_eq!(Vector3::new(1.5, -ACC_GRAVITY, 0.0), sphere2_box.get_net_acceleration());
 }
 
 #[test]
@@ -111,7 +111,7 @@ fn test_complex_sphere_collision() {
     let sphere2_box = state.get(String::from("Sphere2"));
 
     assert_eq!(false, sphere1_box.is_collided(&sphere2_box));
-    assert_eq!(Vector3::new(0.0, -9.8, 0.0), sphere1_box.get_net_acceleration());
+    assert_eq!(Vector3::new(0.0, -ACC_GRAVITY, 0.0), sphere1_box.get_net_acceleration());
     assert_eq!(sphere1_box.get_net_acceleration(), sphere2_box.get_net_acceleration());
 }
 

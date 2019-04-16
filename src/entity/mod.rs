@@ -16,6 +16,7 @@ pub trait BaseEntity {
     fn get_next_velocity(&self, dt: f32) -> Vector3;
     fn apply_force(&mut self, Vector3);
     fn collide_with_entity(&mut self, other: Entity);
+    fn get_name(&self) -> String;
 }
 
 #[derive(Clone)]
@@ -39,16 +40,22 @@ impl Entity {
         }
     }
 
-    pub fn is_collided(&self, ent: &Entity) -> bool {
+    pub fn is_collided(&mut self, ent: &Entity) -> bool {
         match self {
             Entity::Plane(plane) => plane.is_collided(ent),
             Entity::Sphere(sphere) => sphere.is_collided(ent),
         }
     }
+
+    pub fn is_colliding(&self, ent: &Entity) -> bool {
+        match self {
+            Entity::Plane(plane) => plane.is_colliding(ent),
+            Entity::Sphere(sphere) => sphere.is_colliding(ent),
+        }
+    }
 }
 
 impl BaseEntity for Entity {
-    
     fn set_position(&mut self, vec: Vector3) {
         match self {
             Entity::Plane(plane) => plane.set_position(vec),
@@ -123,6 +130,13 @@ impl BaseEntity for Entity {
         match self {
             Entity::Plane(plane) => plane.collide_with_entity(other),
             Entity::Sphere(sphere) => sphere.collide_with_entity(other),
+        }
+    }
+
+    fn get_name(&self) -> String {
+        match self {
+            Entity::Plane(plane) => plane.get_name(),
+            Entity::Sphere(sphere) => sphere.get_name(),
         }
     }
 }

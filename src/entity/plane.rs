@@ -1,9 +1,10 @@
 use entity;
+use entity::three::Object;
 use entity::BaseEntity;
 use entity::Entity;
+use std::collections::HashSet;
 use util::math;
 use util::vector3::Vector3;
-use entity::three::Object;
 
 #[derive(Debug, Clone)]
 pub struct Plane {
@@ -12,19 +13,21 @@ pub struct Plane {
     mass: f32,
     width: f32,
     length: f32,
-    mesh: Option<three::Mesh>
+    mesh: Option<three::Mesh>,
+    collision: HashSet<String>,
 }
 
 impl Plane {
     pub fn new(name: String, position: Vector3, mass: f32, width: f32, length: f32) -> Plane {
-        return Plane {
+        Plane {
             name: name,
             position: position,
             mass: mass,
             width: width,
             length: length,
             mesh: None,
-        };
+            collision: HashSet::new(),
+        }
     }
 
     pub fn set_graphics(&mut self, window: &mut three::Window) {
@@ -38,23 +41,23 @@ impl Plane {
     }
 
     pub fn get_min_point(&self) -> Vector3 {
-        return Vector3::new(
+        Vector3::new(
             self.position.x - (self.width / 2.0),
             self.position.y,
             self.position.z - (self.length / 2.0),
-        );
+        )
     }
 
     pub fn get_max_point(&self) -> Vector3 {
-        return Vector3::new(
+        Vector3::new(
             self.position.x + (self.width / 2.0),
             self.position.y,
             self.position.z + (self.length / 2.0),
-        );
+        )
     }
 
-    pub fn is_collided(&self, ent: &Entity) -> bool {
-        match ent {
+    pub fn is_collided(&mut self, other: &Entity) -> bool {
+        let res = match other {
             Entity::Plane(_) => false,
             Entity::Sphere(sphere) => math::detect_collide_sphere_to_plane(
                 *sphere.get_position(),
@@ -62,12 +65,29 @@ impl Plane {
                 self.get_min_point(),
                 self.get_max_point(),
             ),
+        };
+
+        if self.collision.contains(&other.get_name()) {
+            if res {
+                return false;
+            } else {
+                self.collision.remove(&other.get_name());
+            }
+        } else if res {
+            self.collision.insert(other.get_name());
         }
+        res
+    }
+
+    pub fn is_colliding(&self, other: &Entity) -> bool {
+        self.collision.contains(&other.get_name())
     }
 
     pub fn render(&self) {
         match self.mesh {
-            Some(ref mesh) => mesh.set_position([self.position.x, self.position.y, self.position.z]),
+            Some(ref mesh) => {
+                mesh.set_position([self.position.x, self.position.y, self.position.z])
+            }
             None => panic!("Can't render w/o graphics!"),
         }
     }
@@ -83,7 +103,7 @@ impl entity::BaseEntity for Plane {
     }
 
     fn get_mass(&self) -> f32 {
-        return self.mass;
+        self.mass
     }
 
     fn get_next_position(&self, _dt: f32) -> Vector3 {
@@ -104,11 +124,11 @@ impl entity::BaseEntity for Plane {
     }
 
     fn get_net_acceleration(&self) -> Vector3 {
-        return Vector3::new(0.0, 0.0, 0.0);
+        Vector3::new(0.0, 0.0, 0.0)
     }
 
     fn get_next_velocity(&self, _dt: f32) -> Vector3 {
-        return Vector3::new(0.0, 0.0, 0.0);
+        Vector3::new(0.0, 0.0, 0.0)
     }
 
     fn apply_force(&mut self, _f: Vector3) {
@@ -117,6 +137,10 @@ impl entity::BaseEntity for Plane {
 
     fn collide_with_entity(&mut self, _other: Entity) {
         return;
+    }
+
+    fn get_name(&self) -> String {
+        self.name.clone()
     }
 }
 

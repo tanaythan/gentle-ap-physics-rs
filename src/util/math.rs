@@ -81,8 +81,7 @@ pub fn calculate_impulse_force_between_spheres(sphere1: &Sphere, sphere2: &Spher
 
     let numerator =
         (relative_velocity * -(1.0 + COEFFICIENT_OF_RESTITUTION)).dot_product(dir_of_impact);
-    return dir_of_impact
-        * (numerator * (1.0 / ((1.0 / sphere1.get_mass()) + (1.0 / sphere2.get_mass()))));
+    dir_of_impact * (numerator * (1.0 / ((1.0 / sphere1.get_mass()) + (1.0 / sphere2.get_mass()))))
 }
 
 pub fn calculate_impulse_force_sphere_plane(sphere: &Sphere, _plane: &Plane) -> Vector3 {
@@ -95,9 +94,8 @@ pub fn calculate_impulse_force_sphere_plane(sphere: &Sphere, _plane: &Plane) -> 
     let numerator = (vel * -(1.0 + COEFFICIENT_OF_RESTITUTION)).dot_product(dir_of_impact);
 
     //for not simulating mass of plane as infinite
-    return dir_of_impact * (numerator * (1.0 / (1.0 / sphere.get_mass())));
+    dir_of_impact * (numerator * (1.0 / (1.0 / sphere.get_mass())))
 }
-
 
 #[cfg(test)]
 mod tests {

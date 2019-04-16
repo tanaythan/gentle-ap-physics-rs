@@ -3,18 +3,18 @@ mod entity;
 mod gfx;
 mod util;
 
+extern crate ears;
 extern crate rayon_hash;
 extern crate three;
-extern crate ears;
 
-use gfx::Renderer;
-use std::{thread, time};
+use ears::{AudioController, Sound};
 use entity::plane::Plane;
 use entity::sphere::Sphere;
 use entity::Entity;
+use gfx::Renderer;
 use rayon_hash::hash_map::HashMap;
+use std::{thread, time};
 use util::vector3::Vector3;
-use ears::{Sound, AudioController};
 
 /* We can define sample constants here */
 const DT: f32 = 0.1;
@@ -47,7 +47,6 @@ fn main() {
     let mut i = 1;
     let mut is_open = true;
 
-
     thread::spawn(|| {
         play_sick_beats();
     });
@@ -59,7 +58,6 @@ fn main() {
         i += 1;
         thread::sleep(time::Duration::from_millis(SLEEP_MS));
     }
-
 }
 
 fn play_sick_beats() {
@@ -70,7 +68,11 @@ fn play_sick_beats() {
     }
 }
 
-fn render(window: &mut three::Window, camera: &three::camera::Camera, entities: &rayon_hash::hash_map::HashMap<String, Entity>) -> bool {
+fn render(
+    window: &mut three::Window,
+    camera: &three::camera::Camera,
+    entities: &rayon_hash::hash_map::HashMap<String, Entity>,
+) -> bool {
     let is_updated = window.update();
     if is_updated {
         for (_key, ent) in entities {

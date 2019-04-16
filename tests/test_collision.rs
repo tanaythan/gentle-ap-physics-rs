@@ -5,8 +5,8 @@ use gentle_ap_physics_rs::entity::sphere::Sphere;
 use gentle_ap_physics_rs::entity::worldstate::WorldState;
 use gentle_ap_physics_rs::entity::BaseEntity;
 use gentle_ap_physics_rs::entity::Entity;
-use gentle_ap_physics_rs::util::vector3::Vector3;
 use gentle_ap_physics_rs::util::math::ACC_GRAVITY;
+use gentle_ap_physics_rs::util::vector3::Vector3;
 
 #[test]
 fn test_simple_sphere_collision() {
@@ -33,7 +33,7 @@ fn test_simple_sphere_collision() {
     let mut sphere1_box = state.get(String::from("Sphere1"));
     let mut sphere2_box = state.get(String::from("Sphere2"));
 
-    assert_eq!(false, sphere1_box.is_collided(&sphere2_box));
+    assert_eq!(false, sphere1_box.is_colliding(&sphere2_box));
 
     // After updates should collide
     state.step(dt);
@@ -41,7 +41,7 @@ fn test_simple_sphere_collision() {
     sphere1_box = state.get(String::from("Sphere1"));
     sphere2_box = state.get(String::from("Sphere2"));
 
-    assert_eq!(true, sphere1_box.is_collided(&sphere2_box));
+    assert_eq!(true, sphere1_box.is_colliding(&sphere2_box));
 
     // After collision acc should change
     state.step(dt);
@@ -49,9 +49,15 @@ fn test_simple_sphere_collision() {
     sphere1_box = state.get(String::from("Sphere1"));
     sphere2_box = state.get(String::from("Sphere2"));
 
-    assert_eq!(false, sphere1_box.is_collided(&sphere2_box));
-    assert_eq!(Vector3::new(-1.5, -ACC_GRAVITY, 0.0), sphere1_box.get_net_acceleration());
-    assert_eq!(Vector3::new(1.5, -ACC_GRAVITY, 0.0), sphere2_box.get_net_acceleration());
+    assert_eq!(false, sphere1_box.is_colliding(&sphere2_box));
+    assert_eq!(
+        Vector3::new(-1.5, -ACC_GRAVITY, 0.0),
+        sphere1_box.get_net_acceleration()
+    );
+    assert_eq!(
+        Vector3::new(1.5, -ACC_GRAVITY, 0.0),
+        sphere2_box.get_net_acceleration()
+    );
 }
 
 #[test]
@@ -67,7 +73,7 @@ fn test_simple_plane_collision() {
     // Planes can not "collide"
     let plane1_box = state.get(String::from("Plane1"));
     let plane2_box = state.get(String::from("Plane2"));
-    assert_eq!(false, plane1_box.is_collided(&plane2_box));
+    assert_eq!(false, plane1_box.is_colliding(&plane2_box));
 }
 
 #[test]
@@ -92,16 +98,16 @@ fn test_complex_sphere_collision() {
     let sphere1_box = state.get(String::from("Sphere1"));
     let sphere2_box = state.get(String::from("Sphere2"));
 
-    assert_eq!(false, sphere1_box.is_collided(&sphere2_box));
+    assert_eq!(false, sphere1_box.is_colliding(&sphere2_box));
 
     // After updates should collide
     state.step(dt);
     state.step(dt);
 
-    let sphere1_box = state.get(String::from("Sphere1"));
+    let mut sphere1_box = state.get(String::from("Sphere1"));
     let sphere2_box = state.get(String::from("Sphere2"));
 
-    assert_eq!(true, sphere1_box.is_collided(&sphere2_box));
+    assert_eq!(true, sphere1_box.is_colliding(&sphere2_box));
 
     // After collision acc should change
     state.step(dt);
@@ -110,9 +116,15 @@ fn test_complex_sphere_collision() {
     let sphere1_box = state.get(String::from("Sphere1"));
     let sphere2_box = state.get(String::from("Sphere2"));
 
-    assert_eq!(false, sphere1_box.is_collided(&sphere2_box));
-    assert_eq!(Vector3::new(0.0, -ACC_GRAVITY, 0.0), sphere1_box.get_net_acceleration());
-    assert_eq!(sphere1_box.get_net_acceleration(), sphere2_box.get_net_acceleration());
+    assert_eq!(false, sphere1_box.is_colliding(&sphere2_box));
+    assert_eq!(
+        Vector3::new(0.0, -ACC_GRAVITY, 0.0),
+        sphere1_box.get_net_acceleration()
+    );
+    assert_eq!(
+        sphere1_box.get_net_acceleration(),
+        sphere2_box.get_net_acceleration()
+    );
 }
 
 #[test]
@@ -145,7 +157,7 @@ fn test_collision_with_additional_forces() {
     let sphere1_box = state.get(String::from("Sphere1"));
     let sphere2_box = state.get(String::from("Sphere2"));
 
-    assert_eq!(false, sphere1_box.is_collided(&sphere2_box));
+    assert_eq!(false, sphere1_box.is_colliding(&sphere2_box));
 
     // After updates should collide
     state.step(dt);
@@ -153,7 +165,7 @@ fn test_collision_with_additional_forces() {
     let sphere1_box = state.get(String::from("Sphere1"));
     let sphere2_box = state.get(String::from("Sphere2"));
 
-    assert_eq!(true, sphere1_box.is_collided(&sphere2_box));
+    assert_eq!(true, sphere1_box.is_colliding(&sphere2_box));
 
     // After collision acc should change
     state.step(dt);
@@ -161,7 +173,13 @@ fn test_collision_with_additional_forces() {
     let sphere1_box = state.get(String::from("Sphere1"));
     let sphere2_box = state.get(String::from("Sphere2"));
 
-    assert_eq!(false, sphere1_box.is_collided(&sphere2_box));
-    assert_eq!(Vector3::new(-0.5, -ACC_GRAVITY, -1.0), sphere1_box.get_net_acceleration());
-    assert_eq!(Vector3::new(2.5, -ACC_GRAVITY, -1.0), sphere2_box.get_net_acceleration());
+    assert_eq!(false, sphere1_box.is_colliding(&sphere2_box));
+    assert_eq!(
+        Vector3::new(-0.5, -ACC_GRAVITY, -1.0),
+        sphere1_box.get_net_acceleration()
+    );
+    assert_eq!(
+        Vector3::new(2.5, -ACC_GRAVITY, -1.0),
+        sphere2_box.get_net_acceleration()
+    );
 }

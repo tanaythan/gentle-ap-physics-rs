@@ -51,11 +51,11 @@ fn test_simple_sphere_collision() {
 
     assert_eq!(false, sphere1_box.is_colliding(&sphere2_box));
     assert_eq!(
-        Vector3::new(-1.5, -ACC_GRAVITY, 0.0),
+        Vector3::new(0.0, -ACC_GRAVITY, 0.0),
         sphere1_box.get_net_acceleration()
     );
     assert_eq!(
-        Vector3::new(1.5, -ACC_GRAVITY, 0.0),
+        Vector3::new(0.0, -ACC_GRAVITY, 0.0),
         sphere2_box.get_net_acceleration()
     );
 }
@@ -175,11 +175,11 @@ fn test_collision_with_additional_forces() {
 
     assert_eq!(false, sphere1_box.is_colliding(&sphere2_box));
     assert_eq!(
-        Vector3::new(-0.5, -ACC_GRAVITY, -1.0),
+        Vector3::new(0.0, -ACC_GRAVITY, 0.0),
         sphere1_box.get_net_acceleration()
     );
     assert_eq!(
-        Vector3::new(2.5, -ACC_GRAVITY, -1.0),
+        Vector3::new(0.0, -ACC_GRAVITY, 0.0),
         sphere2_box.get_net_acceleration()
     );
 }

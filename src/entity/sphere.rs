@@ -1,13 +1,14 @@
 use entity;
 use entity::plane::Plane;
+use entity::three::Object;
 use entity::BaseEntity;
 use entity::Entity;
+use std::collections::HashSet;
 use util::math;
 use util::vector3::Vector3;
-use entity::three::Object;
 
 fn get_g_force(mass: f32) -> Vector3 {
-    return Vector3::new(0.0, -1.0 * math::gravity(mass), 0.0);
+    Vector3::new(0.0, -1.0 * math::gravity(mass), 0.0)
 }
 
 #[derive(Debug, Clone)]
@@ -19,10 +20,10 @@ pub struct Sphere {
     velocity: Vector3,
     forces: Vec<Vector3>,
     mesh: Option<three::Mesh>,
+    collision: HashSet<String>,
 }
 
 impl Sphere {
-
     pub fn new(
         name: String,
         position: Vector3,
@@ -30,7 +31,7 @@ impl Sphere {
         radius: f32,
         velocity: Vector3,
     ) -> Sphere {
-        return Sphere {
+        Sphere {
             name: name,
             position: position,
             mass: mass,
@@ -38,7 +39,8 @@ impl Sphere {
             velocity: velocity,
             forces: [get_g_force(mass)].to_vec(),
             mesh: None,
-        };
+            collision: HashSet::new(),
+        }
     }
 
     pub fn set_graphics(&mut self, window: &mut three::Window) {
@@ -51,8 +53,8 @@ impl Sphere {
         self.mesh = Some(mesh);
     }
 
-    pub fn is_collided(&self, other: &Entity) -> bool {
-        match other {
+    pub fn is_collided(&mut self, other: &Entity) -> bool {
+        let res = match other {
             Entity::Sphere(sphere) => math::detect_collide_sphere_to_sphere(
                 self.position,
                 sphere.position,
@@ -65,7 +67,21 @@ impl Sphere {
                 plane.get_min_point(),
                 plane.get_max_point(),
             ),
+        };
+        if self.collision.contains(&other.get_name()) {
+            if res {
+                return false;
+            } else {
+                self.collision.remove(&other.get_name());
+            }
+        } else if res {
+            self.collision.insert(other.get_name());
         }
+        res
+    }
+
+    pub fn is_colliding(&self, other: &Entity) -> bool {
+        self.collision.contains(&other.get_name())
     }
 
     pub fn get_radius(&self) -> f32 {
@@ -75,7 +91,7 @@ impl Sphere {
     pub fn collide_with_sphere(&mut self, other: &mut Sphere) {
         let force = math::calculate_impulse_force_between_spheres(&self, &other);
         self.apply_force(force);
-    
+
         //other is a clone, no need to apply
         //other.apply_force(force * -1.0);
     }
@@ -91,7 +107,9 @@ impl Sphere {
 
     pub fn render(&self) {
         match self.mesh {
-            Some(ref mesh) => mesh.set_position([self.position.x, self.position.y, self.position.z]),
+            Some(ref mesh) => {
+                mesh.set_position([self.position.x, self.position.y, self.position.z])
+            }
             None => panic!("Can't render w/o graphics!"),
         }
     }
@@ -107,11 +125,11 @@ impl entity::BaseEntity for Sphere {
     }
 
     fn get_mass(&self) -> f32 {
-        return self.mass;
+        self.mass
     }
 
     fn get_next_position(&self, dt: f32) -> Vector3 {
-        return math::new_pos(self.position, self.get_next_velocity(dt), dt);
+        math::new_pos(self.position, self.get_next_velocity(dt), dt)
     }
 
     fn new_entity_with_state(&self, _entity: Vector3) -> Entity {
@@ -134,23 +152,27 @@ impl entity::BaseEntity for Sphere {
         for f in &self.forces {
             a = a + *f;
         }
-        return a;
+        a
     }
 
     fn get_next_velocity(&self, dt: f32) -> Vector3 {
         let net_accel = self.get_net_acceleration();
-        return math::velocity_from_acc(self.velocity, net_accel, dt);
+        math::velocity_from_acc(self.velocity, net_accel, dt)
     }
 
     fn apply_force(&mut self, f: Vector3) {
         self.forces.push(f)
     }
 
-    fn collide_with_entity (&mut self, other: Entity) {
+    fn collide_with_entity(&mut self, other: Entity) {
         match other {
             Entity::Sphere(mut sphere) => self.collide_with_sphere(&mut sphere),
             Entity::Plane(plane) => self.collide_with_plane(plane),
         }
+    }
+
+    fn get_name(&self) -> String {
+        self.name.clone()
     }
 }
 
@@ -163,7 +185,7 @@ mod tests {
     #[test]
     fn it_is_collided() {
         let vec = Vector3::new(1.0, 1.0, 1.0);
-        let sphere1 = Sphere::new("Sphere1".to_string(), vec, 1.0, 1.0, vec);
+        let mut sphere1 = Sphere::new("Sphere1".to_string(), vec, 1.0, 1.0, vec);
         let sphere2 = Sphere::new("Sphere2".to_string(), vec, 1.0, 1.0, vec);
         assert_eq!(true, sphere1.is_collided(&Entity::Sphere(sphere2)));
     }
@@ -171,7 +193,7 @@ mod tests {
     #[test]
     fn it_plane_collisions() {
         let vec = Vector3::new(1.0, 1.0, 1.0);
-        let sphere1 = Sphere::new("Sphere1".to_string(), vec, 1.0, 1.0, vec);
+        let mut sphere1 = Sphere::new("Sphere1".to_string(), vec, 1.0, 1.0, vec);
         let plane1 = entity::plane::Plane::new("Plane1".to_string(), vec, 1.0, 1.0, 1.0);
         assert_eq!(true, sphere1.is_collided(&Entity::Plane(plane1)));
         let plane2 = entity::plane::Plane::new(

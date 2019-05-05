@@ -88,7 +88,7 @@ impl WorldState {
         let lerp_state: WorldState = self.clone() * alpha + prev.clone() * (1.0 - alpha);
         lerp_state.print_state();
     }
-    
+
     pub fn all_entities(&self) -> HashMap<String, Entity> {
         self.entities.clone()
     }
@@ -131,8 +131,8 @@ impl Add for WorldState {
 mod tests {
     use super::*;
     use entity::sphere::Sphere;
-    use util::vector3::Vector3;
     use util::math::ACC_GRAVITY;
+    use util::vector3::Vector3;
 
     #[test]
     fn it_update_entities() {

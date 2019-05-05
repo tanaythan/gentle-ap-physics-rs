@@ -140,6 +140,7 @@ impl entity::BaseEntity for Sphere {
         let mut sphere = self.clone();
         sphere.velocity = sphere.get_next_velocity(dt);
         sphere.position = sphere.get_next_position(dt);
+        sphere.forces = [get_g_force(sphere.mass)].to_vec();
         Entity::Sphere(sphere)
     }
 

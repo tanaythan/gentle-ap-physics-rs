@@ -17,7 +17,7 @@ use std::{thread, time};
 use util::vector3::Vector3;
 
 /* We can define sample constants here */
-const DT: f32 = 0.1;
+const DT: f32 = 1.0;
 const MAX_STEPS: i32 = 10020;
 const SLEEP_MS: u64 = 1000;
 

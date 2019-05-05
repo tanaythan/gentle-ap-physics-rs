@@ -4,6 +4,7 @@ use entity::three::Object;
 use entity::BaseEntity;
 use entity::Entity;
 use std::collections::HashSet;
+use std::collections::HashMap;
 use util::math;
 use util::vector3::Vector3;
 
@@ -144,7 +145,17 @@ impl entity::BaseEntity for Sphere {
     }
 
     fn print(&self) {
-        println!("{:?}", self);
+        println!("SPHERE: ");
+        println!("\t Name: {:?}", self.name);
+        println!("\t Position: {:?}", self.position);
+        println!("\t Mass: {:?}", self.mass);
+        println!("\t Radius: {:?}", self.radius);
+        println!("\t Velocity: {:?}", self.velocity);
+        let mut f_map : HashMap<Vector3, i32> =  HashMap::new();
+        for f in &self.forces {
+            *f_map.entry(*f).or_insert(0) += 1;
+        }
+        println!("\t Forces: {:?}", f_map);
     }
 
     fn get_net_acceleration(&self) -> Vector3 {

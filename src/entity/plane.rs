@@ -120,7 +120,12 @@ impl entity::BaseEntity for Plane {
     }
 
     fn print(&self) {
-        println!("{:?}", self);
+        println!("PLANE: ");
+        println!("\t Name: {:?}", self.name);
+        println!("\t Position: {:?}", self.position);
+        println!("\t Mass: {:?}", self.mass);
+        println!("\t Width: {:?}", self.width);
+        println!("\t Length: {:?}", self.length);
     }
 
     fn get_net_acceleration(&self) -> Vector3 {

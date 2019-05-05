@@ -1,6 +1,7 @@
 use std::cmp;
 use std::ops;
 use std::arch::x86_64::*;
+use std::hash::{Hash, Hasher};
 
 #[derive(Debug, Clone, Copy)]
 pub struct Vector3 {
@@ -76,6 +77,16 @@ impl ops::Div<f32> for Vector3 {
 impl cmp::PartialEq<Vector3> for Vector3 {
     fn eq(&self, other: &Vector3) -> bool {
         return self.x == other.x && self.y == other.y && self.z == other.z;
+    }
+}
+
+impl Eq for Vector3 {}
+
+impl Hash for Vector3 {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        self.x.to_string().hash(state);
+        self.y.to_string().hash(state);
+        self.z.to_string().hash(state);
     }
 }
 

@@ -26,20 +26,25 @@ fn main() {
 
     // Initialize our sample entities
     let plane_pos = Vector3::new(0.0, 0.0, 0.0);
-    let sphere1_pos = Vector3::new(0.0, 10.0, 0.0);
-    let sphere1_force = Vector3::new(0.0, 0.0, 0.0);
+    let sphere1_pos = Vector3::new(5.0, 10.0, 0.0);
+    let sphere2_pos = Vector3::new(-5.0, 10.0, 0.0);
+    let sphere1_force = Vector3::new(-1.0, 0.0, 0.0);
+    let sphere2_force = Vector3::new(1.0, 0.0, 0.0);
     let m = 1.0;
     let r = 1.0;
 
-    let plane = Plane::new(String::from("Plane1"), plane_pos, 1.0, 10.0, 10.0);
+    let plane = Plane::new(String::from("Plane1"), plane_pos, 1.0, 30.0, 10.0);
     let sphere1 = Sphere::new(String::from("Sphere1"), sphere1_pos, m, r, sphere1_force);
+    let sphere2 = Sphere::new(String::from("Sphere2"), sphere2_pos, m, r, sphere2_force);
     let mut all_entities: HashMap<String, Entity> = HashMap::new();
 
     all_entities.insert(String::from("Plane1"), Entity::Plane(plane));
     all_entities.insert(String::from("Sphere1"), Entity::Sphere(sphere1));
+    all_entities.insert(String::from("Sphere2"), Entity::Sphere(sphere2));
 
     renderer.set_graphics(all_entities.get_mut(&String::from("Plane1")).unwrap());
     renderer.set_graphics(all_entities.get_mut(&String::from("Sphere1")).unwrap());
+    renderer.set_graphics(all_entities.get_mut(&String::from("Sphere2")).unwrap());
 
     // Initialize sample world state
     let mut state = entity::worldstate::WorldState::new_with_map(all_entities);
